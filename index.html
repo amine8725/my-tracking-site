@@ -107,3 +107,16 @@
                 loginCard.style.display = 'none';
                 dashboard.style.display = 'flex';
                 document.body.style.background = '#f0f2f5';
+                } else {
+                error.innerText = "كلمة السر غير صحيحة، حاولي مرة أخرى.";
+                document.getElementById('password-input').value = "";
+            }
+        }
+        
+        // كود باش يخدم زر Enter ف الـ keyboard
+        document.getElementById("password-input").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") { verify(); }
+        });
+    </script>
+</body>
+</html>
