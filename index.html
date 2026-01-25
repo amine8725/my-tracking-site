@@ -1,42 +1,109 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Private Tracking Site</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Dashboard | لوحة التتبع الخاصة</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f4f4f4; }
-        .lock-screen { display: block; }
-        .content { display: none; }
-        input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
-        button { padding: 10px 20px; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 5px; }
+        :root {
+            --primary-color: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+        .dashboard-container {
+            display: none;
+            width: 95%;
+            max-width: 1200px;
+            background: white;
+            height: 90vh;
+            border-radius: 15px;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        h2 { color: #333; margin-bottom: 1rem; }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus { border-color: var(--primary-color); }
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        button:active { transform: scale(0.98); }
+        #error-msg { color: #ff4d4d; font-size: 14px; margin-top: 10px; }
+        iframe { width: 100%; height: 100%; border: none; }
+        .header {
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
 
-    <div id="lock" class="lock-screen">
-        <h2>هذا الموقع خاص</h2>
-        <p>المرجو إدخال كلمة السر للمتابعة:</p>
-        <input type="password" id="pass" placeholder="كلمة السر...">
-        <button onclick="checkPass()">دخول</button>
-        <p id="error" style="color:red;"></p>
+    <div id="login-card" class="container">
+        <div style="font-size: 50px; margin-bottom: 10px;">🔒</div>
+        <h2>دخول آمن</h2>
+        <p style="color: #666;">المرجو إدخال كلمة السر للوصول للبيانات</p>
+        <input type="password" id="password-input" placeholder="كلمة السر هنا...">
+        <button onclick="verify()">دخول</button>
+        <div id="error-msg"></div>
     </div>
 
-    <div id="mainContent" class="content">
-        <h1>مرحباً بك في موقع التتبع الخاص بك</h1>
-        <iframe src="https://stackby.com/embed/staEPOoOZdLq8vjOLe" width="100%" height="600" frameborder="0"></iframe>
+    <div id="dashboard" class="dashboard-container">
+        <div class="header">
+            <strong style="color: var(--primary-color);">لوحة التتبع الخاصة بك</strong>
+            <button onclick="location.reload()" style="width: auto; padding: 5px 15px; font-size: 12px; background: #666;">خروج</button>
+        </div>
+        <iframe src="https://stackby.com/embed/staEPOoOZdLq8vjOLe"></iframe>
     </div>
 
     <script>
-        function checkPass() {
-            var password = document.getElementById("pass").value;
-            // تقدري تبدلي 1234 بكلمة السر اللي بغيتي
-            if (password === "1234") {
-                document.getElementById("lock").style.display = "none";
-                document.getElementById("mainContent").style.display = "block";
-            } else {
-                document.getElementById("error").innerHTML = "كلمة السر غلط! حاول مرة أخرى.";
-            }
-        }
-    </script>
-</body>
-</html>
+        function verify() {
+            const pass = document.getElementById('password-input').value;
+            const loginCard = document.getElementById('login-card');
+            const dashboard = document.getElementById('dashboard');
+            const error = document.getElementById('error-msg');
+
+            // تقدري تبدلي كلمة السر هنا (دابا هي 1234)
+            if (pass === "1234") {
+                loginCard.style.display = 'none';
+                dashboard.style.display = 'flex';
+                document.body.style.background = '#f0f2f5';
