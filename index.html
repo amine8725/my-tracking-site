@@ -1,37 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Tracking Site</title>
+    <title>Private Tracking Site</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        #counter { font-size: 2em; color: blue; }
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f4f4f4; }
+        .lock-screen { display: block; }
+        .content { display: none; }
+        input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h1>Welcome to My Tracking Website</h1>
-    <p>This page has been visited <span id="counter">0</span> times.</p>
-    <button id="resetBtn">Reset Counter</button>
-    
-    <script src="script.js"></script>
-</body>
-</html>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'staEPOoOZdLq8vjOLe');
-</script>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Tracking Website</title>
-</head>
-<body>
-    <h1>مرحباً بك في موقع التتبع الخاص بي</h1>
-    <iframe src="https://stackby.com/embed/staEPOoOZdLq8vjOLe" width="100%" height="600" frameborder="0"></iframe>
+
+    <div id="lock" class="lock-screen">
+        <h2>هذا الموقع خاص</h2>
+        <p>المرجو إدخال كلمة السر للمتابعة:</p>
+        <input type="password" id="pass" placeholder="كلمة السر...">
+        <button onclick="checkPass()">دخول</button>
+        <p id="error" style="color:red;"></p>
+    </div>
+
+    <div id="mainContent" class="content">
+        <h1>مرحباً بك في موقع التتبع الخاص بك</h1>
+        <iframe src="https://stackby.com/embed/staEPOoOZdLq8vjOLe" width="100%" height="600" frameborder="0"></iframe>
+    </div>
+
+    <script>
+        function checkPass() {
+            var password = document.getElementById("pass").value;
+            // تقدري تبدلي 1234 بكلمة السر اللي بغيتي
+            if (password === "1234") {
+                document.getElementById("lock").style.display = "none";
+                document.getElementById("mainContent").style.display = "block";
+            } else {
+                document.getElementById("error").innerHTML = "كلمة السر غلط! حاول مرة أخرى.";
+            }
+        }
+    </script>
 </body>
 </html>
