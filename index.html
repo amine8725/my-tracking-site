@@ -3,176 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZARO STORE | عالمك للتسوق</title>
+    <title>AZARO STORE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #00bcd4; --dark: #1a1a1a; --accent: #ff4081; --white: #ffffff; }
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; }
-
-        /* الهيدر */
-        header { background: var(--dark); padding: 15px 5%; display: flex; align-items: center; justify-content: space-between; color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .logo { font-size: 28px; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: 1px; }
-        .logo span { color: var(--white); }
-        
-        .search-bar { flex: 1; margin: 0 30px; display: flex; max-width: 600px; }
-        .search-bar input { width: 100%; padding: 12px; border: none; border-radius: 8px 0 0 8px; outline: none; font-size: 16px; }
-        .search-bar button { padding: 12px 20px; background: var(--primary); border: none; border-radius: 0 8px 8px 0; cursor: pointer; color: white; transition: 0.3s; }
-        .search-bar button:hover { background: #0097a7; }
-
-        .nav-icons { display: flex; gap: 25px; align-items: center; }
-        .cart-icon { position: relative; cursor: pointer; transition: 0.3s; }
-        .cart-icon:hover { color: var(--primary); }
-        #cart-count { position: absolute; top: -12px; right: -12px; background: var(--accent); color: white; border-radius: 50%; padding: 2px 7px; font-size: 12px; font-weight: bold; border: 2px solid var(--dark); }
-
-        /* القسم الرئيسي */
-        .hero { background: linear-gradient(135deg, rgba(0,188,212,0.8), rgba(26,26,26,0.9)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1350&q=80'); height: 350px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; margin-bottom: 40px; }
-        .hero h1 { font-size: 45px; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-
-        /* شبكة المنتجات */
-        .container { padding: 0 5% 50px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
-        .product-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; text-align: center; position: relative; border: 1px solid #eee; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .product-card img { width: 100%; height: 220px; object-fit: contain; margin-bottom: 15px; }
-        .product-card h3 { font-size: 19px; margin: 10px 0; color: var(--dark); }
-        .price { color: var(--accent); font-size: 22px; font-weight: bold; display: block; margin-bottom: 15px; }
-        .add-btn { background: var(--dark); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .add-btn:hover { background: var(--primary); }
-
-        /* سلة المشتريات الجانبية */
-        #cart-modal { display: none; position: fixed; right: 0; top: 0; width: 380px; height: 100%; background: white; box-shadow: -10px 0 30px rgba(0,0,0,0.2); z-index: 2001; padding: 25px; transition: 0.5s; }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f4f4f4; padding-bottom: 15px; margin-bottom: 20px; }
-        .cart-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-        .cart-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; }
-        .cart-item-info { flex: 1; }
-        .cart-item-info h4 { margin: 0; font-size: 16px; }
-        .checkout-btn { background: #4caf50; color: white; border: none; width: 100%; padding: 16px; margin-top: 25px; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; transition: 0.3s; }
-        .checkout-btn:hover { background: #43a047; }
-
-        footer { background: var(--dark); color: #888; text-align: center; padding: 40px 20px; margin-top: 50px; border-top: 4px solid var(--primary); }
-        footer b { color: var(--white); }
+        :root { --primary: #00bcd4; --dark: #1a1a1a; --accent: #ff4081; }
+        body { margin: 0; font-family: sans-serif; background: #f4f7f6; }
+        header { background: var(--dark); padding: 15px 5%; display: flex; align-items: center; justify-content: space-between; color: white; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary); text-decoration: none; }
+        .container { padding: 20px 5%; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .product-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .product-card img { width: 100%; height: 200px; object-fit: contain; }
+        .add-btn { background: var(--dark); color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+        #cart-modal { display: none; position: fixed; right: 0; top: 0; width: 320px; height: 100%; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1); z-index: 2000; padding: 20px; }
+        .checkout-btn { background: #25d366; color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="#" class="logo">AZARO<span> STORE</span></a>
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="ما الذي تبحث عنه اليوم؟">
-        <button><i class="fas fa-search"></i></button>
-    </div>
-    <div class="nav-icons">
-        <div class="cart-icon" onclick="toggleCart()">
-            <i class="fas fa-shopping-bag fa-lg"></i>
-            <span id="cart-count">0</span>
-        </div>
-        <i class="fas fa-user-circle fa-lg" style="cursor: pointer;"></i>
+    <a href="#" class="logo">AZARO STORE</a>
+    <div onclick="toggleCart()" style="cursor:pointer">
+        <i class="fas fa-shopping-bag"></i> <span id="cart-count">0</span>
     </div>
 </header>
 
-<div class="hero">
-    <div>
-        <h1>AZARO STORE</h1>
-        <p>وجهتك الأولى لأحدث المنتجات العالمية بأفضل الأسعار</p>
-    </div>
-</div>
-
-<div class="container" id="product-list">
-    </div>
+<div class="container" id="product-list"></div>
 
 <div id="cart-modal">
-    <div class="cart-header">
-        <h3>حقيبة التسوق</h3>
-        <span onclick="toggleCart()" style="cursor: pointer; font-size: 24px;">&times;</span>
-    </div>
+    <h3>سلة المشتريات</h3>
     <div id="cart-items"></div>
-    <div style="margin-top: 20px; font-size: 20px; font-weight: bold; display: flex; justify-content: space-between;">
-        <span>الإجمالي:</span>
-        <span id="cart-total">0</span> <small>درهم</small>
-    </div>
-    <button class="checkout-btn" onclick="checkout()">إتمام عملية الشراء</button>
+    <hr>
+    <div id="total-price">الإجمالي: 0 درهم</div>
+    <button class="checkout-btn" onclick="sendToWhatsApp()">إرسال الطلب عبر واتساب</button>
+    <button onclick="toggleCart()" style="margin-top:10px; width:100%; border:none; background:none; cursor:pointer;">إغلاق</button>
 </div>
 
-<footer>
-    <p>جميع الحقوق محفوظة &copy; 2026 <b>AZARO STORE</b></p>
-    <div style="margin-top: 10px; font-size: 20px;">
-        <i class="fab fa-facebook" style="margin: 0 10px; cursor: pointer;"></i>
-        <i class="fab fa-instagram" style="margin: 0 10px; cursor: pointer;"></i>
-        <i class="fab fa-whatsapp" style="margin: 0 10px; cursor: pointer;"></i>
-    </div>
-</footer>
-
 <script>
+    // ************************************************
+    // 👇👇 ضعي رقم هاتفك هنا (مثال: 212612345678) 👇👇
+    const MY_PHONE_NUMBER = "212720822628"; 
+    // ************************************************
+
     const products = [
-        { id: 1, name: "آيفون 15 برو ماكس", price: 13500, image: "https://images.unsplash.com/photo-1695048133142-1a20484d256e?w=400" },
-        { id: 2, name: "ماكبوك إير M2", price: 11000, image: "https://images.unsplash.com/photo-1611186871348-b1ec696e5237?w=400" },
-        { id: 3, name: "سماعات سوني WH-1000XM5", price: 3200, image: "https://images.unsplash.com/photo-1546435770-a3e4265029b6?w=400" },
-        { id: 4, name: "بلاي ستيشن 5", price: 5800, image: "https://images.unsplash.com/photo-1606813907291-d86ebb995a26?w=400" },
-        { id: 5, name: "نايك Air Jordan", price: 1800, image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400" },
-        { id: 6, name: "عطر ديور سوفاج", price: 1400, image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400" }
+        { id: 1, name: "آيفون 15 برو", price: 12500, image: "https://images.unsplash.com/photo-1695048133142-1a20484d256e?w=400" },
+        { id: 2, name: "سماعات سوني", price: 3000, image: "https://images.unsplash.com/photo-1546435770-a3e4265029b6?w=400" },
+        { id: 3, name: "نايك Air Jordan", price: 1500, image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400" }
     ];
 
     let cart = [];
 
     function displayProducts() {
-        const productList = document.getElementById('product-list');
-        productList.innerHTML = products.map(p => `
+        document.getElementById('product-list').innerHTML = products.map(p => `
             <div class="product-card">
-                <img src="${p.image}" alt="${p.name}">
-                <h3>${p.name}</h3>
-                <span class="price">${p.price} درهم</span>
-                <button class="add-btn" onclick="addToCart(${p.id})">أضف للسلة <i class="fas fa-cart-plus"></i></button>
+                <img src="${p.image}">
+                <h4>${p.name}</h4>
+                <p>${p.price} درهم</p>
+                <button class="add-btn" onclick="addToCart(${p.id})">إضافة للسلة</button>
             </div>
         `).join('');
     }
 
     function addToCart(id) {
-        const product = products.find(p => p.id === id);
-        cart.push(product);
+        cart.push(products.find(p => p.id === id));
         updateCart();
-        // تأثير بسيط عند الإضافة
-        const btn = event.target;
-        btn.innerHTML = "تمت الإضافة ✓";
-        btn.style.background = "#4caf50";
-        setTimeout(() => {
-            btn.innerHTML = 'أضف للسلة <i class="fas fa-cart-plus"></i>';
-            btn.style.background = "#1a1a1a";
-        }, 1000);
     }
 
     function updateCart() {
         document.getElementById('cart-count').innerText = cart.length;
-        const cartItems = document.getElementById('cart-items');
-        cartItems.innerHTML = cart.map((item, index) => `
-            <div class="cart-item">
-                <img src="${item.image}" alt="">
-                <div class="cart-item-info">
-                    <h4>${item.name}</h4>
-                    <span>${item.price} درهم</span>
-                </div>
-                <i class="fas fa-times" style="color:#ff4081; cursor:pointer;" onclick="removeItem(${index})"></i>
-            </div>
-        `).join('');
-        
+        document.getElementById('cart-items').innerHTML = cart.map(item => `<div>${item.name} - ${item.price} درهم</div>`).join('');
         const total = cart.reduce((sum, item) => sum + item.price, 0);
-        document.getElementById('cart-total').innerText = total;
-    }
-
-    function removeItem(index) {
-        cart.splice(index, 1);
-        updateCart();
+        document.getElementById('total-price').innerText = `الإجمالي: ${total} درهم`;
     }
 
     function toggleCart() {
-        const modal = document.getElementById('cart-modal');
-        modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        const m = document.getElementById('cart-modal');
+        m.style.display = m.style.display === 'block' ? 'none' : 'block';
     }
 
-    function checkout() {
-        if(cart.length === 0) return alert("سلتك فارغة!");
-        alert("طلبك قيد المراجعة في AZARO STORE! المجموع: " + document.getElementById('cart-total').innerText + " درهم");
-        cart = [];
-        updateCart();
-        toggleCart();
+    function sendToWhatsApp() {
+        if(cart.length === 0) return alert("السلة فارغة");
+        let msg = "طلب جديد من AZARO STORE:\n";
+        cart.forEach(item => msg += `- ${item.name} (${item.price} درهم)\n`);
+        msg += `\nالمجموع: ${document.getElementById('total-price').innerText}`;
+        window.open(`https://wa.me/${MY_PHONE_NUMBER}?text=${encodeURIComponent(msg)}`);
     }
 
     displayProducts();
