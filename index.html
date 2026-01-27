@@ -3,100 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZARO CONSTRUCTION | نبني أحلامكم</title>
+    <title>AZARO REAL ESTATE | شقق للبيع</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main: #e67e22; --dark: #2c3e50; --silver: #bdc3c7; }
-        body { margin: 0; font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+        :root { --gold: #c5a059; --dark: #1a1a1a; --gray: #f8f9fa; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--gray); }
         
-        /* الهيدر */
-        header { background: var(--dark); color: white; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 24px; font-weight: bold; color: var(--main); }
-        nav a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; }
+        header { background: var(--dark); color: white; padding: 20px 5%; text-align: center; border-bottom: 3px solid var(--gold); }
+        .logo { font-size: 28px; font-weight: bold; color: var(--gold); letter-spacing: 2px; }
 
-        /* القسم الرئيسي (Hero) */
-        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&w=1350&q=80'); 
-                height: 80vh; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
-        .hero h1 { font-size: 48px; margin-bottom: 10px; }
-        .hero p { font-size: 20px; margin-bottom: 20px; }
-        .btn-call { background: var(--main); color: white; padding: 15px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 18px; }
+        .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1200'); 
+                height: 300px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
 
-        /* الخدمات */
-        .services { padding: 50px 5%; text-align: center; background: #f9f9f9; }
-        .services h2 { color: var(--dark); margin-bottom: 40px; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .service-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-bottom: 4px solid var(--main); }
-        .service-box i { font-size: 40px; color: var(--main); margin-bottom: 15px; }
+        .container { padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        
+        /* بطاقة الشقة */
+        .apartment-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: 0.3s; }
+        .apartment-card:hover { transform: translateY(-10px); }
+        .apartment-card img { width: 100%; height: 230px; object-fit: cover; }
+        
+        .details { padding: 20px; }
+        .details h3 { margin: 0 0 10px; color: var(--dark); }
+        .location { color: #666; font-size: 14px; margin-bottom: 15px; }
+        .features { display: flex; gap: 15px; margin-bottom: 15px; font-size: 13px; color: #555; }
+        .features span { background: #eee; padding: 5px 10px; border-radius: 5px; }
+        
+        .price { font-size: 22px; font-weight: bold; color: var(--gold); margin-bottom: 20px; display: block; }
+        
+        /* زر الطلب */
+        .btn-interest { background: var(--dark); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .btn-interest:hover { background: var(--gold); }
 
-        /* معرض الصور (المشاريع) */
-        .projects { padding: 50px 5%; text-align: center; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 30px; }
-        .projects-grid img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .projects-grid img:hover { filter: brightness(70%); }
+        /* بلاطة المعلومات (Modal) */
+        #booking-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 100%; max-width: 400px; position: relative; }
+        .modal-content h3 { margin-top: 0; color: var(--dark); border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .send-whatsapp { background: #25d366; color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
 
-        /* زر التواصل العائم */
-        .whatsapp-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); z-index: 1000; text-decoration: none; }
-
-        footer { background: var(--dark); color: white; text-align: center; padding: 30px; margin-top: 40px; }
+        footer { background: var(--dark); color: white; text-align: center; padding: 40px; margin-top: 50px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">AZARO CONSTRUCTION</div>
-    <nav>
-        <a href="#services">خدماتنا</a>
-        <a href="#projects">مشاريعنا</a>
-        <a href="#contact">اتصل بنا</a>
-    </nav>
+    <div class="logo">AZARO REAL ESTATE</div>
+    <p>شقق فاخرة للبيع - عروض حصرية مباشرة</p>
 </header>
 
-<section class="hero">
-    <div>
-        <h1>نبني المستقبل بدقة وإتقان</h1>
-        <p>شركة رائدة في مجال البناء، التصميم، والترميم في المغرب</p>
-        <a href="tel:212600000000" class="btn-call"><i class="fas fa-phone"></i> اتصل بنا الآن</a>
-    </div>
-</section>
+<div class="hero">
+    <h1>اعثر على منزل أحلامك اليوم</h1>
+</div>
 
-<section class="services" id="services">
-    <h2>خدماتنا الاحترافية</h2>
-    <div class="services-grid">
-        <div class="service-box">
-            <i class="fas fa-hard-hat"></i>
-            <h3>بناء وتشييد</h3>
-            <p>بناء المنازل والفلل والمجمعات التجارية بأحدث المعايير.</p>
-        </div>
-        <div class="service-box">
-            <i class="fas fa-paint-roller"></i>
-            <h3>الترميم والدهان</h3>
-            <p>تجديد شامل للمباني القديمة مع لمسة عصرية وفنية.</p>
-        </div>
-        <div class="service-box">
-            <i class="fas fa-pencil-ruler"></i>
-            <h3>تصميم هندسي</h3>
-            <p>مخططات ذكية وتصاميم ثلاثية الأبعاد لكل المساحات.</p>
-        </div>
+<div class="container" id="apartments-list">
     </div>
-</section>
 
-<section class="projects" id="projects">
-    <h2>أحدث مشاريعنا</h2>
-    <div class="projects-grid">
-        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=500" alt="مشروع 1">
-        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500" alt="مشروع 2">
-        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500" alt="مشروع 3">
+<div id="booking-modal">
+    <div class="modal-content">
+        <span onclick="closeModal()" style="position:absolute; left:20px; top:15px; cursor:pointer; font-size:24px;">&times;</span>
+        <h3>مهتم بهذه الشقة؟</h3>
+        <p id="selected-apt" style="font-weight: bold; color: var(--gold);"></p>
+        <input type="text" id="clientName" placeholder="اسمك الكامل">
+        <input type="tel" id="clientPhone" placeholder="رقم هاتفك">
+        <textarea id="clientMsg" placeholder="متى تود زيارة الشقة؟ أو أي استفسار آخر" rows="3"></textarea>
+        <button class="send-whatsapp" onclick="sendInquiry()">إرسال الاستفسار عبر واتساب</button>
     </div>
-</section>
+</div>
 
 <footer>
-    <p>جميع الحقوق محفوظة &copy; 2026 AZARO CONSTRUCTION</p>
-    <p>العنوان: شارع محمد الخامس، الدار البيضاء، المغرب</p>
+    <p>جميع الحقوق محفوظة &copy; 2026 AZARO REAL ESTATE</p>
 </footer>
 
-<a href="https://wa.me/212600000000" class="whatsapp-float" target="_blank">
-    <i class="fab fa-whatsapp"></i>
-</a>
+<script>
+    // 👇 بدلي برقمك الحقيقي
+    const MY_PHONE = "212XXXXXXXXX"; 
+
+    const apartments = [
+        { 
+            id: 1, 
+            name: "شقة عصرية بوسط المدينة", 
+            location: "طنجة، حي مالباطا", 
+            price: "850,000", 
+            size: "95م²", 
+            rooms: "3 غرف",
+            image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500"
+        },
+        { 
+            id: 2, 
+            name: "دوبليكس فاخر مع تراس", 
+            location: "الدار البيضاء، عين الدياب", 
+            price: "1,500,000", 
+            size: "140م²", 
+            rooms: "4 غرف",
+            image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500"
+        },
+        { 
+            id: 3, 
+            name: "شقة هادئة قرب البحر", 
+            location: "أكادير، فونتي", 
+            price: "1,100,000", 
+            size: "110م²", 
+            rooms: "3 غرف",
+            image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500"
+        }
+    ];
+
+    let currentApt = "";
+
+    function displayApts() {
+        document.getElementById('apartments-list').innerHTML = apartments.map(apt => `
+            <div class="apartment-card">
+                <img src="${apt.image}" alt="${apt.name}">
+                <div class="details">
+                    <h3>${apt.name}</h3>
+                    <div class="location"><i class="fas fa-map-marker-alt"></i> ${apt.location}</div>
+                    <div class="features">
+                        <span><i class="fas fa-expand"></i> ${apt.size}</span>
+                        <span><i class="fas fa-bed"></i> ${apt.rooms}</span>
+                    </div>
+                    <span class="price">${apt.price} درهم</span>
+                    <button class="btn-interest" onclick="openModal('${apt.name}')">أنا مهتم / حجز زيارة</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function openModal(name) {
+        currentApt = name;
+        document.getElementById('selected-apt').innerText = name;
+        document.getElementById('booking-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('booking-modal').style.display = 'none';
+    }
+
+    function sendInquiry() {
+        const name = document.getElementById('clientName').value;
+        const phone = document.getElementById('clientPhone').value;
+        const msg = document.getElementById('clientMsg').value;
+
+        if(!name || !phone) return alert("يرجى إدخال الاسم والهاتف");
+
+        let text = `*استفسار عن عقار - AZARO REAL ESTATE*\n\n`;
+        text += `*🏠 الشقة:* ${currentApt}\n`;
+        text += `*👤 المهتم:* ${name}\n`;
+        text += `*📞 الهاتف:* ${phone}\n`;
+        text += `*💬 الرسالة:* ${msg}\n`;
+
+        window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(text)}`);
+    }
+
+    displayApts();
+</script>
 
 </body>
 </html>
