@@ -3,98 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZARO REAL ESTATE | منصة العقارات الاحترافية</title>
+    <title>AZARO REAL ESTATE | Luxury Properties</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script type="text/javascript" src="https://npmcdn.com/parse/dist/parse.min.js"></script>
 
     <style>
-        :root { --gold: #c5a059; --dark: #121212; --light: #f4f4f4; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--light); color: var(--dark); }
+        :root { --gold: #c5a059; --dark: #111; --white: #fff; --gray: #f8f9fa; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--gray); }
         
-        nav { background: var(--dark); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .logo { font-size: 22px; font-weight: bold; color: var(--gold); text-decoration: none; }
-        .auth-btn { background: var(--gold); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        /* Navbar */
+        nav { background: var(--dark); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--gold); text-decoration: none; }
+        .nav-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; color: var(--dark); margin-right: 10px; }
+        .admin-link { color: #555; font-size: 12px; cursor: pointer; text-decoration: underline; }
 
-        .hero { height: 350px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1200'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+        /* Hero */
+        .hero { height: 350px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1200'); background-size: cover; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
 
-        .container { padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        /* Products Grid */
+        .container { padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-10px); }
         .card img { width: 100%; height: 220px; object-fit: cover; }
-        .card-info { padding: 20px; }
-        .price { color: var(--gold); font-size: 22px; font-weight: bold; display: block; margin-bottom: 10px; }
+        .card-body { padding: 20px; }
+        .price { color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px; display: block; }
+        .buy-btn { background: var(--dark); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
+        /* Modals (Auth & Admin) */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; padding: 35px; border-radius: 15px; width: 100%; max-width: 400px; position: relative; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 100%; max-width: 400px; position: relative; }
+        .admin-modal { max-width: 800px; overflow-y: auto; max-height: 80vh; }
         input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .main-btn { background: var(--dark); color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
         
-        .wa-float { position: fixed; bottom: 25px; left: 25px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; }
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        th, td { border: 1px solid #eee; padding: 12px; text-align: right; }
+        th { background: var(--dark); color: white; }
+
+        /* WhatsApp */
+        .wa-float { position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1000; }
     </style>
 </head>
 <body>
 
 <nav>
     <a href="#" class="logo">AZARO REAL ESTATE</a>
-    <div id="user-section">
-        <button class="auth-btn" onclick="openAuth()">إنشاء حساب مستثمر</button>
+    <div id="user-nav">
+        <button class="nav-btn" onclick="openModal('authModal')">دخول / تسجيل</button>
     </div>
 </nav>
 
 <section class="hero">
     <div>
-        <h1>بيتك الجديد في انتظارك</h1>
-        <p>عقارات حصرية مُنتقاة بعناية لراحتكم</p>
+        <h1>اكتشف شقتك المستقبلية</h1>
+        <p>عقارات فاخرة في أرقى أحياء المغرب</p>
     </div>
 </section>
 
-<div class="container" id="apartments"></div>
+<div class="container" id="apartments-list"></div>
 
 <div class="modal" id="authModal">
     <div class="modal-content">
-        <span onclick="closeAuth()" style="position:absolute; left:20px; top:15px; cursor:pointer; font-size:24px;">&times;</span>
-        <h3>تسجيل حساب جديد</h3>
+        <span onclick="closeModal('authModal')" style="position:absolute; left:20px; cursor:pointer;">&times;</span>
+        <h3>إنشاء حساب مستثمر</h3>
         <input type="text" id="regName" placeholder="الاسم الكامل">
         <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
         <input type="password" id="regPass" placeholder="كلمة المرور">
         <input type="tel" id="regPhone" placeholder="رقم الهاتف">
-        <button class="main-btn" onclick="handleSignup()">تأكيد التسجيل</button>
+        <button class="buy-btn" style="background:var(--gold); color:black" onclick="handleSignup()">تأكيد التسجيل</button>
     </div>
 </div>
 
-<a href="https://wa.me/212600000000" class="wa-float" target="_blank">
-    <i class="fab fa-whatsapp"></i>
-</a>
+<div class="modal" id="adminModal">
+    <div class="modal-content admin-modal">
+        <span onclick="closeModal('adminModal')" style="position:absolute; left:20px; cursor:pointer;">&times;</span>
+        <h3><i class="fas fa-users-cog"></i> قائمة الزبائن المسجلين</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>الهاتف</th>
+                    <th>التاريخ</th>
+                </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<div style="text-align: center; padding: 20px;">
+    <span class="admin-link" onclick="openAdmin()">دخول المسؤول 🔐</span>
+</div>
+
+<a href="https://wa.me/212720822628" class="wa-float"><i class="fab fa-whatsapp"></i></a>
 
 <script>
-    // ربط قاعدة البيانات بالمفاتيح الخاصة بكِ
-    Parse.initialize(
-        "TU8wdbgmuKMHpGp76QmMBIV2281RD6IVhg0NE4uS", 
-        "3AhKkYYWl0LVZWJQujXoVgSS5qaX76aod3qVBtFK"
-    );
+    // 1. إعدادات الربط (استبدلي TU8wdbgmuKMHpGp76QmMBIV2281RD6IVhg0NE4uS و YOUR_JS_KEY)
+    Parse.initialize("TU8wdbgmuKMHpGp76QmMBIV2281RD6IVhg0NE4uS", "3AhKkYYWl0LVZWJQujXoVgSS5qaX76aod3qVBtFK");
     Parse.serverURL = 'https://parseapi.back4app.com/';
 
-    const apts = [
-        { name: "شقة رويال مارينا", price: "1,200,000", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500" },
-        { name: "فيلا الهدوء العصرية", price: "3,500,000", img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500" },
-        { name: "شقة مالباطا - طنجة", price: "850,000", img: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500" }
+    // 2. بيانات الشقق
+    const apartments = [
+        { name: "شقة رويال - طنجة", price: "950,000", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500" },
+        { name: "دوبليكس فاخر - الدار البيضاء", price: "1,800,000", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500" },
+        { name: "إقامة النخيل - مراكش", price: "1,100,000", img: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500" }
     ];
 
     function displayApts() {
-        document.getElementById('apartments').innerHTML = apts.map(a => `
+        document.getElementById('apartments-list').innerHTML = apartments.map(apt => `
             <div class="card">
-                <img src="${a.img}">
-                <div class="card-info">
-                    <span class="price">${a.price} درهم</span>
-                    <h3>${a.name}</h3>
-                    <button class="main-btn" style="background:var(--gold); color:black;" onclick="window.open('https://wa.me/212600000000')">حجز موعد زيارة</button>
+                <img src="${apt.img}">
+                <div class="card-body">
+                    <span class="price">${apt.price} درهم</span>
+                    <h3>${apt.name}</h3>
+                    <button class="buy-btn" onclick="window.open('https://wa.me/212XXXXXXXXX')">حجز موعد زيارة</button>
                 </div>
             </div>
         `).join('');
     }
 
-    function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
-    function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
+    // 3. وظائف الحساب
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
     async function handleSignup() {
         const user = new Parse.User();
@@ -106,24 +137,29 @@
 
         try {
             await user.signUp();
-            alert("✅ مبروك! تم تسجيل حسابك وحفظ بياناتك.");
-            closeAuth();
-            checkUser();
-        } catch (error) {
-            alert("❌ خطأ: " + error.message);
-        }
+            alert("✅ تم تسجيلك بنجاح!");
+            closeModal('authModal');
+            location.reload();
+        } catch (e) { alert("❌ خطأ: " + e.message); }
     }
 
-    function checkUser() {
-        const currentUser = Parse.User.current();
-        if (currentUser) {
-            document.getElementById('user-section').innerHTML = `<span style="color:var(--gold); font-weight:bold;">مرحباً، ${currentUser.get('fullName')}</span>`;
-        }
+    // 4. وظائف لوحة التحكم
+    async function openAdmin() {
+        const query = new Parse.Query(Parse.User);
+        try {
+            const users = await query.find();
+            document.getElementById('admin-table-body').innerHTML = users.map(u => `
+                <tr>
+                    <td>${u.get('fullName')}</td>
+                    <td>${u.get('phone')}</td>
+                    <td>${u.createdAt.toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+            openModal('adminModal');
+        } catch (e) { alert("يجب ضبط المفاتيح أولاً!"); }
     }
 
     displayApts();
-    checkUser();
 </script>
-
 </body>
 </html>
