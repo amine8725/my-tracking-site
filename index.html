@@ -1,57 +1,129 @@
-<style>
-    /* تصميم بلاطة تسجيل الدخول */
-    .auth-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center; }
-    .auth-content { background: white; padding: 40px; border-radius: 15px; width: 100%; max-width: 400px; text-align: center; position: relative; }
-    .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
-    .auth-tab { flex: 1; padding: 10px; cursor: pointer; font-weight: bold; color: #888; }
-    .auth-tab.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
-    .auth-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-    .btn-auth { background: var(--dark); color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-    .btn-auth:hover { background: var(--gold); color: var(--dark); }
-    .login-trigger { cursor: pointer; color: white; background: none; border: 1px solid var(--gold); padding: 8px 15px; border-radius: 5px; font-size: 13px; transition: 0.3s; }
-    .login-trigger:hover { background: var(--gold); color: var(--dark); }
-</style>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZARO REAL ESTATE | منصة العقارات</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="text/javascript" src="https://npmcdn.com/parse/dist/parse.min.js"></script>
 
-<button class="login-trigger" onclick="toggleAuth()">تسجيل الدخول / إنضم إلينا</button>
-
-<div class="auth-modal" id="authModal">
-    <div class="auth-content">
-        <span onclick="toggleAuth()" style="position:absolute; left:20px; top:15px; cursor:pointer; font-size:24px;">&times;</span>
-        <div class="auth-tabs">
-            <div class="auth-tab active" id="tabLogin" onclick="switchAuth('login')">تسجيل الدخول</div>
-            <div class="auth-tab" id="tabSignup" onclick="switchAuth('signup')">حساب جديد</div>
-        </div>
+    <style>
+        :root { --gold: #c5a059; --dark: #121212; --light: #f4f4f4; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--light); color: var(--dark); }
         
-        <div id="authForm">
-            <h3 id="authTitle">مرحباً بك مجدداً</h3>
-            <input type="email" class="auth-input" placeholder="البريد الإلكتروني">
-            <input type="password" class="auth-input" placeholder="كلمة المرور">
-            <div id="signupFields" style="display: none;">
-                <input type="text" class="auth-input" placeholder="الاسم الكامل">
-                <input type="tel" class="auth-input" placeholder="رقم الهاتف">
-            </div>
-            <button class="btn-auth" onclick="handleAuth()">تأكيد</button>
-        </div>
+        /* Navigation */
+        nav { background: var(--dark); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 22px; font-weight: bold; color: var(--gold); text-decoration: none; }
+        .auth-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+        /* Hero Section */
+        .hero { height: 400px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1200'); background-size: cover; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+
+        /* Grid Apartments */
+        .container { padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-info { padding: 20px; }
+        .price { color: var(--gold); font-size: 20px; font-weight: bold; display: block; margin-bottom: 10px; }
+
+        /* Auth Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .main-btn { background: var(--dark); color: white; border: none; width: 100%; padding: 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        /* Floating WhatsApp */
+        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#" class="logo">AZARO REAL ESTATE</a>
+    <div id="user-section">
+        <button class="auth-btn" onclick="openAuth()">تسجيل الدخول / حساب جديد</button>
+    </div>
+</nav>
+
+<section class="hero">
+    <div>
+        <h1>استثمر في مستقبلك اليوم</h1>
+        <p>شقق فاخرة وعقارات محفظة في أفضل المواقع</p>
+    </div>
+</section>
+
+<div class="container" id="apartments">
+    </div>
+
+<div class="modal" id="authModal">
+    <div class="modal-content">
+        <h3 id="modalTitle">إنشاء حساب جديد</h3>
+        <input type="text" id="regName" placeholder="الاسم الكامل">
+        <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
+        <input type="password" id="regPass" placeholder="كلمة المرور">
+        <input type="tel" id="regPhone" placeholder="رقم الهاتف">
+        <button class="main-btn" onclick="handleSignup()">تأكيد التسجيل</button>
+        <p style="text-align:center; font-size:12px; cursor:pointer;" onclick="closeAuth()">إغلاق</p>
     </div>
 </div>
 
+<a href="https://wa.me/212720822628" class="wa-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
 <script>
-    function toggleAuth() {
-        const modal = document.getElementById('authModal');
-        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    // 1. ربط قاعدة البيانات (بدلي YOUR_APP_ID و YOUR_JS_KEY بلمفاتيح ديالك)
+    Parse.initialize("TU8wdbgmuKMHpGp76QmMBIV2281RD6IVhg0NE4uS", "tfPMctcpvD0UjR5OnxZxdvxLaDED3HewBEuJsJX7");
+    Parse.serverURL = 'https://parseapi.back4app.com/';
+
+    // 2. عرض الشقق
+    const apts = [
+        { name: "شقة رويال - طنجة", price: "950,000", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500" },
+        { name: "إقامة النخيل - مراكش", price: "1,200,000", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500" }
+    ];
+
+    document.getElementById('apartments').innerHTML = apts.map(a => `
+        <div class="card">
+            <img src="${a.img}">
+            <div class="card-info">
+                <span class="price">${a.price} درهم</span>
+                <h3>${a.name}</h3>
+                <button class="main-btn" style="background:var(--gold)" onclick="window.open('https://wa.me/212XXXXXXXXX')">استفسار عبر واتساب</button>
+            </div>
+        </div>
+    `).join('');
+
+    // 3. وظائف الحساب
+    function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
+    function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
+
+    async function handleSignup() {
+        const user = new Parse.User();
+        user.set("username", document.getElementById('regEmail').value);
+        user.set("email", document.getElementById('regEmail').value);
+        user.set("password", document.getElementById('regPass').value);
+        user.set("fullName", document.getElementById('regName').value);
+        user.set("phone", document.getElementById('regPhone').value);
+
+        try {
+            await user.signUp();
+            alert("مبروك! تم إنشاء حسابك وحفظ بياناتك في القاعدة.");
+            closeAuth();
+            checkUser();
+        } catch (error) {
+            alert("خطأ: " + error.message);
+        }
     }
 
-    function switchAuth(type) {
-        const isLogin = type === 'login';
-        document.getElementById('tabLogin').classList.toggle('active', isLogin);
-        document.getElementById('tabSignup').classList.toggle('active', !isLogin);
-        document.getElementById('signupFields').style.display = isLogin ? 'none' : 'block';
-        document.getElementById('authTitle').innerText = isLogin ? 'مرحباً بك مجدداً' : 'إنشاء حساب مستثمر';
+    function checkUser() {
+        const currentUser = Parse.User.current();
+        if (currentUser) {
+            document.getElementById('user-section').innerHTML = `<span style="color:white">مرحباً، ${currentUser.get('fullName')}</span>`;
+        }
     }
-
-    function handleAuth() {
-        // هنا يتم ربط قاعدة البيانات لاحقاً، حالياً سنظهر رسالة ترحيبية
-        alert("تمت العملية بنجاح! مرحباً بك في عائلة AZARO REAL ESTATE.");
-        toggleAuth();
-    }
+    checkUser();
 </script>
+
+</body>
+</html>
