@@ -1,130 +1,57 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZARO REAL ESTATE | Luxury Properties</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --gold: #d4af37; --dark: #0f1111; --white: #ffffff; --section: #f9f9f9; }
-        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--white); color: var(--dark); scroll-behavior: smooth; }
-        
-        /* Navigation */
-        nav { background: var(--dark); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .logo { font-size: 24px; font-weight: bold; color: var(--gold); text-decoration: none; text-transform: uppercase; }
-        .nav-links a { color: white; text-decoration: none; margin-right: 20px; font-size: 14px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--gold); }
+<style>
+    /* تصميم بلاطة تسجيل الدخول */
+    .auth-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center; }
+    .auth-content { background: white; padding: 40px; border-radius: 15px; width: 100%; max-width: 400px; text-align: center; position: relative; }
+    .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+    .auth-tab { flex: 1; padding: 10px; cursor: pointer; font-weight: bold; color: #888; }
+    .auth-tab.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
+    .auth-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+    .btn-auth { background: var(--dark); color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+    .btn-auth:hover { background: var(--gold); color: var(--dark); }
+    .login-trigger { cursor: pointer; color: white; background: none; border: 1px solid var(--gold); padding: 8px 15px; border-radius: 5px; font-size: 13px; transition: 0.3s; }
+    .login-trigger:hover { background: var(--gold); color: var(--dark); }
+</style>
 
-        /* Hero Section */
-        .hero { height: 85vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200'); 
-                background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
-        .hero-content h1 { font-size: 50px; margin-bottom: 20px; letter-spacing: 2px; }
-        .hero-content p { font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
-        .btn-gold { background: var(--gold); color: var(--dark); padding: 15px 35px; text-decoration: none; font-weight: bold; border-radius: 5px; transition: 0.3s; }
-        .btn-gold:hover { transform: scale(1.05); background: white; }
+<button class="login-trigger" onclick="toggleAuth()">تسجيل الدخول / إنضم إلينا</button>
 
-        /* Statistics */
-        .stats { display: flex; justify-content: space-around; padding: 50px 5%; background: var(--dark); color: var(--gold); text-align: center; }
-        .stat-item h2 { font-size: 35px; margin: 0; color: white; }
-
-        /* About Section */
-        .about { padding: 80px 5%; display: flex; align-items: center; gap: 50px; flex-wrap: wrap; background: var(--section); }
-        .about-text { flex: 1; min-width: 300px; }
-        .about-img { flex: 1; min-width: 300px; border-left: 5px solid var(--gold); }
-        .about-img img { width: 100%; border-radius: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-
-        /* Apartments Grid */
-        .apartments { padding: 80px 5%; }
-        .section-title { text-align: center; margin-bottom: 50px; }
-        .section-title h2 { font-size: 32px; border-bottom: 3px solid var(--gold); display: inline-block; padding-bottom: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; transition: 0.4s; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 250px; object-fit: cover; }
-        .card-body { padding: 25px; }
-        .card-price { font-size: 24px; color: var(--gold); font-weight: bold; margin-bottom: 15px; display: block; }
-        
-        /* Floating WhatsApp */
-        .whatsapp-btn { position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 1000; text-decoration: none; }
-
-        footer { background: var(--dark); color: #888; text-align: center; padding: 50px; border-top: 5px solid var(--gold); }
-    </style>
-</head>
-<body>
-
-<nav>
-    <a href="#" class="logo">AZARO <span style="color:white">REALTY</span></a>
-    <div class="nav-links">
-        <a href="#about">من نحن</a>
-        <a href="#projects">العقارات</a>
-        <a href="tel:212600000000">اتصل الآن</a>
-    </div>
-</nav>
-
-<section class="hero">
-    <div class="hero-content">
-        <h1>الفخامة في كل تفصيل</h1>
-        <p>نقدم لك أرقى الشقق والعقارات في المغرب بمعايير عالمية وضمانات حقيقية.</p>
-        <a href="#projects" class="btn-gold">تصفح المشاريع</a>
-    </div>
-</section>
-
-<section class="stats">
-    <div class="stat-item"><h2>+150</h2><p>شقة مباعة</p></div>
-    <div class="stat-item"><h2>+12</h2><p>سنة خبرة</p></div>
-    <div class="stat-item"><h2>100%</h2><p>رضا الزبناء</p></div>
-</section>
-
-<section class="about" id="about">
-    <div class="about-text">
-        <h2>لماذا تختار AZARO REAL ESTATE؟</h2>
-        <p>نحن لسنا مجرد وكالة عقارية، بل شركاؤك في بناء المستقبل. نلتزم بتقديم عقارات قانونية، محفظة، وبأرقى التصاميم المعمارية الحديثة.</p>
-        <ul style="list-style: none; padding: 0;">
-            <li><i class="fas fa-check-circle" style="color:var(--gold)"></i> مواكبة قانونية شاملة</li>
-            <li><i class="fas fa-check-circle" style="color:var(--gold)"></i> أفضل المواقع الاستراتيجية</li>
-            <li><i class="fas fa-check-circle" style="color:var(--gold)"></i> تسهيلات في الأداء</li>
-        </ul>
-    </div>
-    <div class="about-img">
-        <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=600" alt="About Azaro">
-    </div>
-</section>
-
-<section class="apartments" id="projects">
-    <div class="section-title">
-        <h2>عروضنا المختارة</h2>
-    </div>
-    <div class="grid" id="apt-grid">
+<div class="auth-modal" id="authModal">
+    <div class="auth-content">
+        <span onclick="toggleAuth()" style="position:absolute; left:20px; top:15px; cursor:pointer; font-size:24px;">&times;</span>
+        <div class="auth-tabs">
+            <div class="auth-tab active" id="tabLogin" onclick="switchAuth('login')">تسجيل الدخول</div>
+            <div class="auth-tab" id="tabSignup" onclick="switchAuth('signup')">حساب جديد</div>
         </div>
-</section>
-
-<footer>
-    <p>AZARO REAL ESTATE - الاستثمار الآمن للمستقبل</p>
-    <p style="font-size: 12px; margin-top: 20px;">جميع الحقوق محفوظة &copy; 2026</p>
-</footer>
-
-<a href="https://wa.me/212600000000" class="whatsapp-btn">
-    <i class="fab fa-whatsapp"></i>
-</a>
+        
+        <div id="authForm">
+            <h3 id="authTitle">مرحباً بك مجدداً</h3>
+            <input type="email" class="auth-input" placeholder="البريد الإلكتروني">
+            <input type="password" class="auth-input" placeholder="كلمة المرور">
+            <div id="signupFields" style="display: none;">
+                <input type="text" class="auth-input" placeholder="الاسم الكامل">
+                <input type="tel" class="auth-input" placeholder="رقم الهاتف">
+            </div>
+            <button class="btn-auth" onclick="handleAuth()">تأكيد</button>
+        </div>
+    </div>
+</div>
 
 <script>
-    const apartments = [
-        { name: "شقة رويال - مارينا", price: "1,200,000", size: "120م²", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500" },
-        { name: "إقامة الأندلس - فيلا", price: "2,500,000", size: "300م²", img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500" },
-        { name: "شقة عصرية - وسط المدينة", price: "780,000", size: "85م²", img: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500" }
-    ];
+    function toggleAuth() {
+        const modal = document.getElementById('authModal');
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
 
-    document.getElementById('apt-grid').innerHTML = apartments.map(apt => `
-        <div class="card">
-            <img src="${apt.img}">
-            <div class="card-body">
-                <span class="card-price">${apt.price} درهم</span>
-                <h3>${apt.name}</h3>
-                <p><i class="fas fa-ruler-combined"></i> المساحة: ${apt.size}</p>
-                <button onclick="window.open('https://wa.me/212600000000')" style="width:100%; padding:12px; background:var(--dark); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">احجز موعداً للزيارة</button>
-            </div>
-        </div>
-    `).join('');
+    function switchAuth(type) {
+        const isLogin = type === 'login';
+        document.getElementById('tabLogin').classList.toggle('active', isLogin);
+        document.getElementById('tabSignup').classList.toggle('active', !isLogin);
+        document.getElementById('signupFields').style.display = isLogin ? 'none' : 'block';
+        document.getElementById('authTitle').innerText = isLogin ? 'مرحباً بك مجدداً' : 'إنشاء حساب مستثمر';
+    }
+
+    function handleAuth() {
+        // هنا يتم ربط قاعدة البيانات لاحقاً، حالياً سنظهر رسالة ترحيبية
+        alert("تمت العملية بنجاح! مرحباً بك في عائلة AZARO REAL ESTATE.");
+        toggleAuth();
+    }
 </script>
-</body>
-</html>
