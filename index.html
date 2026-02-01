@@ -3,93 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZARO REAL ESTATE | Luxury Portal</title>
+    <title>AZARO REAL ESTATE | شقق الدعم المباشر</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://npmcdn.com/parse/dist/parse.min.js"></script>
 
     <style>
-        :root { --gold: #c5a059; --dark: #111; --white: #fff; --gray: #f4f7f6; }
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--gray); color: var(--dark); overflow-x: hidden; }
+        :root { --gold: #d4af37; --dark: #1a1a1a; --white: #fff; --gray: #f4f7f6; --red-support: #ff4d4d; }
+        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--gray); color: var(--dark); }
         
         /* Navbar */
-        nav { background: var(--dark); padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .logo { font-size: 22px; font-weight: bold; color: var(--gold); text-decoration: none; letter-spacing: 1px; }
-        .user-nav-area { display: flex; align-items: center; gap: 15px; }
-        .nav-btn { background: var(--gold); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; color: #111; }
-        .profile-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 30px; }
-        .nav-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--gold); }
+        nav { background: var(--dark); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--gold); }
+        .logo { font-size: 22px; font-weight: 800; color: var(--gold); text-decoration: none; }
+        .nav-btn { background: var(--gold); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
         /* Hero */
-        .hero { height: 300px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+        .hero { height: 350px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+        .hero h1 { font-size: 32px; margin-bottom: 10px; }
 
-        /* Grid الرئيسية */
+        /* Grid */
         .container { padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; position: relative; }
+        .card:hover { transform: translateY(-10px); }
+        .card img { width: 100%; height: 220px; object-fit: cover; }
         .card-body { padding: 20px; }
-        .price { color: var(--gold); font-size: 20px; font-weight: bold; }
+        .city-tag { background: var(--dark); color: white; padding: 3px 10px; border-radius: 4px; font-size: 12px; margin-bottom: 10px; display: inline-block; }
 
-        /* صفحة التفاصيل (تظهر عند النقر على الإعلان) */
-        #detailsPage { display: none; position: fixed; inset: 0; background: white; z-index: 5000; overflow-y: auto; padding: 0; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .details-header { position: sticky; top: 0; background: white; padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; z-index: 5001; }
-        .details-container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .img-gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 25px; }
-        .img-gallery img { width: 100%; height: 350px; object-fit: cover; border-radius: 10px; }
-        .sub-imgs { display: flex; flex-direction: column; gap: 10px; }
-        .sub-imgs img { height: 170px; }
-        .specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; background: var(--gray); padding: 20px; border-radius: 10px; }
-        .spec-item { display: flex; align-items: center; gap: 10px; font-weight: bold; }
-        .spec-item i { color: var(--gold); }
+        /* Support Badge Animation */
+        .support-badge { background: linear-gradient(45deg, #ff0000, #ff5f6d); color: white; padding: 6px 15px; border-radius: 50px; font-size: 14px; font-weight: bold; display: inline-block; animation: pulse 2s infinite; box-shadow: 0 0 10px rgba(255, 77, 77, 0.5); }
+        @keyframes pulse { 0% { transform: scale(0.95); } 70% { transform: scale(1); } 100% { transform: scale(0.95); } }
 
-        /* Modals (Auth & Settings) */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; position: relative; text-align: right; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; text-align: right; }
-        .main-btn { background: var(--dark); color: white; border: none; width: 100%; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
+        /* Details Page */
+        #detailsPage { display: none; position: fixed; inset: 0; background: white; z-index: 5000; overflow-y: auto; }
+        .feature-highlight { border: 2px dashed var(--gold); padding: 15px; background: #fffdf5; border-radius: 10px; margin: 20px 0; }
+        .main-btn { background: var(--dark); color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 18px; margin-top: 15px; }
 
-        /* WhatsApp */
-        .wa-float { position: fixed; bottom: 25px; left: 25px; background: #25d366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; }
-        
-        @media (max-width: 600px) { .img-gallery { grid-template-columns: 1fr; } .sub-imgs { display: none; } }
+        /* Modals */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; position: relative; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-family: 'Cairo'; }
+
+        .wa-float { position: fixed; bottom: 25px; left: 25px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; text-decoration: none; }
     </style>
 </head>
 <body>
 
 <nav>
     <a href="#" class="logo">AZARO REAL ESTATE</a>
-    <div class="user-nav-area">
-        <div id="user-profile-nav" class="profile-trigger" style="display:none;" onclick="openModal('settingsModal')">
-            <span id="nav-user-name" style="font-size: 13px;"></span>
-            <img id="nav-user-img" src="https://via.placeholder.com/32" class="nav-avatar">
-        </div>
-        <button id="login-nav-btn" class="nav-btn" onclick="openModal('authModal')">دخول / تسجيل</button>
+    <div id="auth-ui">
+        <button class="nav-btn" onclick="openModal('authModal')">تسجيل الدخول</button>
     </div>
 </nav>
 
 <section class="hero">
     <div>
-        <h1 style="margin:0; font-size: 28px;">استثمارك العقاري الأمثل</h1>
-        <p>شقق وفيلات بمواصفات عالمية</p>
+        <h1>شقق فاخرة $93$م² تدعم السكن</h1>
+        <p>الحاجب • فاس • سيدي قاسم • تاوجطات</p>
     </div>
 </section>
 
 <div class="container" id="property-list"></div>
 
 <div id="detailsPage">
-    <div class="details-header">
-        <button onclick="closeDetails()" style="border:none; background:none; font-size:20px; cursor:pointer;"><i class="fas fa-arrow-right"></i> عودة</button>
-        <h3 style="margin-right:20px; font-size:16px;">تفاصيل العقار</h3>
-    </div>
-    <div id="detailsContent" class="details-container"></div>
+    <div style="padding:15px; border-bottom:1px solid #eee;"><button onclick="closeDetails()" style="border:none; background:none; font-size:20px; cursor:pointer;">✕ عودة</button></div>
+    <div id="detailsContent" style="max-width:800px; margin:0 auto; padding:20px;"></div>
 </div>
 
 <div class="modal" id="authModal">
     <div class="modal-content">
-        <span onclick="closeModal('authModal')" style="position:absolute; left:20px; cursor:pointer;">&times;</span>
-        <h3>إنشاء حساب جديد</h3>
+        <h3 style="margin-top:0;">إنشاء حساب جديد</h3>
         <input type="text" id="regName" placeholder="الاسم الكامل">
         <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
         <input type="password" id="regPass" placeholder="كلمة المرور">
@@ -98,142 +81,99 @@
     </div>
 </div>
 
-<div class="modal" id="settingsModal">
-    <div class="modal-content">
-        <span onclick="closeModal('settingsModal')" style="position:absolute; left:20px; cursor:pointer;">&times;</span>
-        <h3 style="text-align:center;">إعدادات حسابي</h3>
-        <div style="text-align:center; margin-bottom:15px;">
-            <img id="setting-preview-img" src="https://via.placeholder.com/70" style="width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid var(--gold);">
-            <br>
-            <input type="file" id="imgInput" style="display:none;" onchange="previewImg(event)">
-            <button onclick="document.getElementById('imgInput').click()" style="background:none; border:none; color:var(--gold); cursor:pointer; font-size:12px; font-weight:bold;">تغيير الصورة</button>
-        </div>
-        <input type="text" id="setting-name" placeholder="الاسم الجديد">
-        <div style="background:#f0f4f8; padding:12px; border-radius:8px; margin:15px 0;">
-            <h4 style="margin:0;"><i class="fas fa-headset"></i> هل تحتاج مساعدة؟</h4>
-            <button onclick="window.open('https://wa.me/21269985826')" style="background:#25d366; color:white; border:none; padding:8px; width:100%; border-radius:5px; margin-top:8px; cursor:pointer;">راسلنا واتساب</button>
-        </div>
-        <button class="main-btn" style="background:var(--gold); color:black;" onclick="updateProfile()">حفظ التغييرات</button>
-        <p onclick="handleLogout()" style="color:red; text-align:center; cursor:pointer; font-size:12px; margin-top:15px;">تسجيل الخروج</p>
-    </div>
-</div>
-
 <a href="https://wa.me/21269985826" class="wa-float"><i class="fab fa-whatsapp"></i></a>
 
 <script>
- // 1. الرابط اللي خديتي من ديسكورد (Webhook) حطيه هنا
-const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
-
-// 2. وظيفة إرسال الإشعارات لديسكورد
-async function notifyDiscord(title, desc) {
-    try {
-        await fetch(DISCORD_WEBHOOK, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                embeds: [{
-                    title: title,
-                    description: desc,
-                    color: 12951641, // لون ذهبي
-                    timestamp: new Date()
-                }]
-            })
-        });
-    } catch(e) { console.error("Discord Error"); }
-}
-
-// 3. وظيفة طلب "اللوكاليزاسيون" وإرسالها فوراً
-function getVisitorLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
-            const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
-            
-            // إرسال الموقع لديسكورد
-            await notifyDiscord("📍 موقع زائر جديد", `الزائر سمح بالوصول لموقعه:\n[فتح الموقع على خرائط جوجل](${mapsUrl})`);
-        }, (err) => {
-            console.log("الزائر رفض مشاركة الموقع");
-        });
-    }
-}
-
-// 4. باش تخدم "اللوكاليزاسيون" غير يدخل الزائر، زيدي هاد السطر فـ أول السكريبت أو وسط window.onload
-getVisitorLocation();
-    
-    // 1. إعدادات الربط (ضعي مفاتيحك هنا)
+    // 1. المفاتيح (ضعي مفاتيحك هنا)
     Parse.initialize("TU8wdbgmuKMHpGp76QmMBIV2281RD6IVhg0NE4uS", "3AhKkYYWl0LVZWJQujXoVgSS5qaX76aod3qVBtFK");
     Parse.serverURL = 'https://parseapi.back4app.com/';
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
 
-    // 2. بيانات العقارات الشاملة
+    // 2. البيانات المخصصة
     const properties = [
-        {
-            id: 1, name: "شقة تجزءة المهدي - الحاجب", price: "450,000", 
-            mainImg: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
-            gallery: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=500", "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500"],
-            rooms: 3, baths: 2, size: "94م²", floor: "الاول", desc: "إطلالة خلابة، مجهزة بمطبخ عصري ."
-        },
-        {
-            id: 2, name: "فيلا مودرن - مراكش", price: "2,400,000", 
-            mainImg: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800",
-            gallery: ["https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500", "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=500"],
-            rooms: 5, baths: 4, size: "350م²", floor: "طابقين", desc: "فيلا فخمة مع مسبح خاص وحديقة واسعة في أرقى مناطق النخيل."
-        }
+        { id: 1, city: "الحاجب", name: "شقة النور - الحاجب", price: "460,000", size: "93 م²", rooms: 3, baths: 2, kitchen: "مجهزة بالكامل", img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800", desc: "شقة رائعة في قلب مدينة الحاجب، مساحة 93 متر، تتكون من 3 غرف واسعة، 2 حمامات، ومطبخ مجهز. **هذه الشقة مستفيدة بالكامل من الدعم المباشر للسكن.**" },
+        { id: 2, city: "فاس", name: "إقامة الأندلس - فاس", price: "520,000", size: "93 م²", rooms: 3, baths: 2, kitchen: "مجهزة بالكامل", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800", desc: "شقة فاخرة بفاس بمساحة 93 متر، تصميم معماري عصري مع 3 غرف و2 حمامات ومطبخ مجهز. **ميزة استثنائية: الشقة مسجلة ضمن العقارات التي تقبل الدعم المباشر.**" },
+        { id: 3, city: "سيدي قاسم", name: "شقق الياسمين - سيدي قاسم", price: "430,000", size: "93 م²", rooms: 3, baths: 2, kitchen: "مجهزة بالكامل", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800", desc: "عرض خاص في سيدي قاسم: شقة 93 متر بـ 3 غرف و2 حمامات. المطبخ مجهز بالكامل. **الآن يمكنك الاستفادة من دعم الدولة عند شراء هذه الشقة.**" },
+        { id: 4, city: "عين تاوجطات", name: "جوهرة تاوجطات السكنية", price: "410,000", size: "93 م²", rooms: 3, baths: 2, kitchen: "مجهزة بالكامل", img: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", desc: "هدوء وراحة في عين تاوجطات. شقة 93 متر، مطبخ مجهز، 3 غرف واسعة وحمامين. **نضمن لك قبول ملف الدعم المباشر للسكن لهذه الشقة.**" }
     ];
 
-    // 3. عرض القائمة الرئيسية
-    function renderList() {
+    // 3. وظائف التشغيل
+    function render() {
         document.getElementById('property-list').innerHTML = properties.map(p => `
             <div class="card" onclick="openDetails(${p.id})">
-                <img src="${p.mainImg}">
+                <img src="${p.img}">
                 <div class="card-body">
-                    <span class="price">${p.price} درهم</span>
-                    <h3 style="margin:10px 0;">${p.name}</h3>
-                    <p style="font-size:12px; color:#777;"><i class="fas fa-search-plus"></i> اضغط للتفاصيل</p>
+                    <span class="city-tag">${p.city}</span>
+                    <h3 style="margin:5px 0;">${p.name}</h3>
+                    <div style="color:var(--gold); font-weight:bold; font-size:18px;">${p.price} درهم</div>
                 </div>
             </div>
         `).join('');
     }
 
-    // 4. فتح صفحة تفاصيل الإعلان
     function openDetails(id) {
-        const p = properties.find(item => item.id === id);
-        const content = `
-            <div class="img-gallery">
-                <img src="${p.mainImg}">
-                <div class="sub-imgs">
-                    <img src="${p.gallery[0]}">
-                    <img src="${p.gallery[1]}">
-                </div>
+        const p = properties.find(x => x.id === id);
+        document.getElementById('detailsContent').innerHTML = `
+            <img src="${p.img}" style="width:100%; border-radius:15px; height:320px; object-fit:cover;">
+            <div style="margin-top:20px;">
+                <div class="support-badge"><i class="fas fa-check-circle"></i> مستفيدة من دعم السكن</div>
+                <h1>${p.name}</h1>
             </div>
-            <h1>${p.name}</h1>
-            <h2 style="color:var(--gold)">${p.price} درهم</h2>
-            <div class="specs-grid">
-                <div class="spec-item"><i class="fas fa-bed"></i> غرف: ${p.rooms}</div>
-                <div class="spec-item"><i class="fas fa-bath"></i> حمام: ${p.baths}</div>
-                <div class="spec-item"><i class="fas fa-ruler-combined"></i> مساحة: ${p.size}</div>
-                <div class="spec-item"><i class="fas fa-layer-group"></i> طابق: ${p.floor}</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; background:#f9f9f9; padding:20px; border-radius:10px;">
+                <div><strong>المساحة:</strong> ${p.size}</div>
+                <div><strong>الغرف:</strong> ${p.rooms}</div>
+                <div><strong>الحمامات:</strong> ${p.baths}</div>
+                <div><strong>المطبخ:</strong> ${p.kitchen}</div>
             </div>
-            <h3>الوصف:</h3>
-            <p style="line-height:1.7; color:#555;">${p.desc}</p>
-            <button class="main-btn" style="background:#25d366; font-size:18px;" onclick="window.open('https://wa.me/212600000000?text=استفسار عن ${p.name}')">
-                <i class="fab fa-whatsapp"></i> تواصل للحجز
-            </button>
-            <div style="height:50px;"></div>
+            <div class="feature-highlight">
+                <h4 style="margin:0; color:var(--gold);">🎯 مميزات الشقة:</h4>
+                <p style="margin-top:10px;">${p.desc}</p>
+            </div>
+            <button class="main-btn" onclick="requestProp('${p.name}')">حجز معاينة وإرسال طلب</button>
         `;
-        document.getElementById('detailsContent').innerHTML = content;
         document.getElementById('detailsPage').style.display = 'block';
-        document.body.style.overflow = 'hidden';
     }
 
-    function closeDetails() {
-        document.getElementById('detailsPage').style.display = 'none';
-        document.body.style.overflow = 'auto';
+    // إشعارات ديسكورد والموقع
+    async function notifyDiscord(title, desc) {
+        if(!DISCORD_WEBHOOK.startsWith("http")) return;
+        await fetch(DISCORD_WEBHOOK, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ embeds: [{ title: title, description: desc, color: 12951641, timestamp: new Date() }] })
+        });
     }
 
-    // 5. وظائف الحساب والإعدادات
+    async function requestProp(name) {
+        const u = Parse.User.current();
+        if(!u) return openModal('authModal');
+        await notifyDiscord("🎯 طلب حجز جديد", `الزبون: ${u.get('fullName')}\nالعقار: ${name}\nالهاتف: ${u.get('phone')}`);
+        alert("تم إرسال طلبك! سنتواصل معك قريباً.");
+    }
+
+    function getLoc() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                const url = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                await notifyDiscord("📍 زائر جديد", `وافق الزائر على مشاركة موقعه:\n[فتح الخريطة](${url})`);
+            });
+        }
+    }
+
+    async function trackVisit() {
+        const Visit = Parse.Object.extend("Visits");
+        const query = new Parse.Query(Visit);
+        try {
+            let v = await query.first() || new Visit();
+            v.increment("count");
+            await v.save();
+        } catch(e) {}
+    }
+
+    // وظائف المودال والحساب
     function openModal(id) { document.getElementById(id).style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function closeDetails() { document.getElementById('detailsPage').style.display = 'none'; }
 
     async function handleSignup() {
         const user = new Parse.User();
@@ -242,81 +182,10 @@ getVisitorLocation();
         user.set("password", document.getElementById('regPass').value);
         user.set("fullName", document.getElementById('regName').value);
         user.set("phone", document.getElementById('regPhone').value);
-        try {
-            await user.signUp();
-            alert("مرحباً بك!");
-            location.reload();
-        } catch (e) { alert("خطأ: " + e.message); }
+        try { await user.signUp(); location.reload(); } catch(e) { alert(e.message); }
     }
 
-    function previewImg(e) {
-        const file = e.target.files[0];
-        if(file) document.getElementById('setting-preview-img').src = URL.createObjectURL(file);
-    }
-
-    async function updateProfile() {
-        const user = Parse.User.current();
-        const newName = document.getElementById('setting-name').value;
-        const imgFile = document.getElementById('imgInput').files[0];
-        if (newName) user.set("fullName", newName);
-        if (imgFile) {
-            const parseFile = new Parse.File("avatar.jpg", imgFile);
-            user.set("profilePicture", parseFile);
-        }
-        try {
-            await user.save();
-            alert("تم التحديث ✅");
-            location.reload();
-        } catch (e) { alert("فشل التحديث"); }
-    }
-
-    async function handleLogout() {
-        await Parse.User.logOut();
-        location.reload();
-    }
-
-    function checkStatus() {
-        const user = Parse.User.current();
-        if (user) {
-            document.getElementById('login-nav-btn').style.display = 'none';
-            document.getElementById('user-profile-nav').style.display = 'flex';
-            document.getElementById('nav-user-name').innerText = user.get('fullName');
-            document.getElementById('setting-name').value = user.get('fullName');
-            const pic = user.get('profilePicture');
-            if (pic) {
-                document.getElementById('nav-user-img').src = pic.url();
-                document.getElementById('setting-preview-img').src = pic.url();
-            }
-        }
-    }
-// وظيفة لحساب الزيارات
-async function trackVisit() {
-    const VisitLog = Parse.Object.extend("Visits");
-    const query = new Parse.Query(VisitLog);
-    
-    try {
-        // نبحث عن سجل الزيارات (سننشئ سجلاً واحداً فقط ونقوم بتحديثه)
-        let visitRecord = await query.first();
-        
-        if (!visitRecord) {
-            // إذا كان الموقع يفتح لأول مرة، ننشئ السجل
-            visitRecord = new VisitLog();
-            visitRecord.set("count", 1);
-        } else {
-            // نزيد عدد الزوار بـ 1
-            visitRecord.increment("count");
-        }
-        await visitRecord.save();
-        console.log("تم تسجيل الزيارة بنجاح");
-    } catch (error) {
-        console.error("خطأ في حساب الزيارات:", error);
-    }
-}
-
-// استدعاء الوظيفة عند تحميل الصفحة
-trackVisit();
-    renderList();
-    checkStatus();
+    window.onload = () => { render(); trackVisit(); getLoc(); };
 </script>
 </body>
 </html>
