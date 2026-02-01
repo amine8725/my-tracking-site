@@ -121,72 +121,45 @@
 <a href="https://wa.me/21269985826" class="wa-float"><i class="fab fa-whatsapp"></i></a>
 
 <script>
- // 1. وظيفة طلب الموقع الجغرافي
+ // 1. الرابط اللي خديتي من ديسكورد (Webhook) حطيه هنا
+const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465111327482708105/rrFvR8ThqXCp28WtaopCTPj8BRRHUzwfd92IbiECYK3B1n4qwy5qiKhHGGVY-A3GhPdN";
+
+// 2. وظيفة إرسال الإشعارات لديسكورد
+async function notifyDiscord(title, desc) {
+    try {
+        await fetch(DISCORD_WEBHOOK, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                embeds: [{
+                    title: title,
+                    description: desc,
+                    color: 12951641, // لون ذهبي
+                    timestamp: new Date()
+                }]
+            })
+        });
+    } catch(e) { console.error("Discord Error"); }
+}
+
+// 3. وظيفة طلب "اللوكاليزاسيون" وإرسالها فوراً
 function getVisitorLocation() {
     if (navigator.geolocation) {
-        // المتصفح سيطلب الإذن من الزائر هنا
-        navigator.geolocation.getCurrentPosition(sendLocationToDiscord, handleLocationError);
-    } else {
-        console.log("المتصفح لا يدعم تحديد الموقع");
-    }
-}
-
-// 2. إرسال البيانات إلى ديسكورد في حال وافق الزائر
-async function sendLocationToDiscord(position) {
-    const lat = position.coords.latitude;
-    const lng = position.coords.longitude;
-    const mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
-
-    const message = {
-        content: "📍 **زائر جديد في الموقع الآن!**",
-        embeds: [{
-            title: "تحديد موقع الزائر",
-            description: `الزائر وافق على مشاركة موقعه.\n\n🔗 [اضغط هنا لفتح الموقع في خرائط جوجل](${mapsLink})`,
-            color: 3447003, // لون أزرق
-            fields: [
-                { name: "خط العرض (Lat)", value: lat.toString(), inline: true },
-                { name: "خط الطول (Lng)", value: lng.toString(), inline: true }
-            ],
-            timestamp: new Date()
-        }]
-    };
-
-    try {
-        await fetch(DISCORD_WEBHOOK, { // تأكدي أن متغير DISCORD_WEBHOOK معرف عندك
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(message)
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+            
+            // إرسال الموقع لديسكورد
+            await notifyDiscord("📍 موقع زائر جديد", `الزائر سمح بالوصول لموقعه:\n[فتح الموقع على خرائط جوجل](${mapsUrl})`);
+        }, (err) => {
+            console.log("الزائر رفض مشاركة الموقع");
         });
-    } catch (e) {
-        console.error("فشل إرسال الموقع لديسكورد");
     }
 }
 
-// 3. التعامل مع رفض الزائر أو حدوث خطأ
-function handleLocationError(error) {
-    let msg = "";
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            msg = "الزائر رفض مشاركة الموقع.";
-            break;
-        case error.POSITION_UNAVAILABLE:
-            msg = "معلومات الموقع غير متوفرة.";
-            break;
-        case error.TIMEOUT:
-            msg = "انتهى وقت طلب الموقع.";
-            break;
-    }
-    console.log(msg);
-    // يمكنكِ إرسال رسالة لديسكورد تخبرك بأن الزائر رفض (اختياري)
-}
-
-// 4. تشغيل الوظيفة بمجرد تحميل الصفحة
-window.onload = function() {
-    getVisitorLocation();
-    render(); // استدعاء وظيفة عرض العقارات السابقة
-    check();  // استدعاء وظيفة فحص المستخدم السابقة
-    trackVisit(); // حساب الزيارات
-};
+// 4. باش تخدم "اللوكاليزاسيون" غير يدخل الزائر، زيدي هاد السطر فـ أول السكريبت أو وسط window.onload
+getVisitorLocation();
     
     // 1. إعدادات الربط (ضعي مفاتيحك هنا)
     Parse.initialize("TU8wdbgmuKMHpGp76QmMBIV2281RD6IVhg0NE4uS", "3AhKkYYWl0LVZWJQujXoVgSS5qaX76aod3qVBtFK");
