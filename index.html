@@ -249,7 +249,32 @@
             }
         }
     }
+// وظيفة لحساب الزيارات
+async function trackVisit() {
+    const VisitLog = Parse.Object.extend("Visits");
+    const query = new Parse.Query(VisitLog);
+    
+    try {
+        // نبحث عن سجل الزيارات (سننشئ سجلاً واحداً فقط ونقوم بتحديثه)
+        let visitRecord = await query.first();
+        
+        if (!visitRecord) {
+            // إذا كان الموقع يفتح لأول مرة، ننشئ السجل
+            visitRecord = new VisitLog();
+            visitRecord.set("count", 1);
+        } else {
+            // نزيد عدد الزوار بـ 1
+            visitRecord.increment("count");
+        }
+        await visitRecord.save();
+        console.log("تم تسجيل الزيارة بنجاح");
+    } catch (error) {
+        console.error("خطأ في حساب الزيارات:", error);
+    }
+}
 
+// استدعاء الوظيفة عند تحميل الصفحة
+trackVisit();
     renderList();
     checkStatus();
 </script>
