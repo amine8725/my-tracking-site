@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anbar | عنبر للعطور</title>
+    <title>Anbar | عنبر للعطور الفاخرة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root {
-            --gold: #d4af37;
-            --dark: #1a1a1a;
+            --gold-light: #f1e7a3; /* ذهبي باهت للبريق */
+            --gold-main: #d4af37; /* ذهبي كلاسيكي */
+            --gold-dark: #b69223; /* ذهبي داكن للظلال */
+            --black-matte: #1a1a1a; /* أسود مطفي */
+            --black-rich: #0d0d0d; /* أسود عميق */
             --white: #ffffff;
-            --gray: #f9f9f9;
+            --off-white: #fafafa;
         }
 
         body {
             margin: 0;
             font-family: 'Cairo', sans-serif;
-            background-color: var(--gray);
-            color: var(--dark);
+            background-color: var(--black-matte);
+            color: var(--white);
+            overflow-x: hidden; /* لمنع المشاكل مع الحركات */
         }
 
-        /* Header */
+        /* --- Header (شريط التنقل) الفخم --- */
         header {
-            background: var(--dark);
+            background: rgba(13, 13, 13, 0.95); /* شفافية بسيطة */
             color: white;
             padding: 1rem 5%;
             display: flex;
@@ -33,13 +37,18 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 15px rgba(212, 175, 55, 0.2); /* ظل ذهبي خفيف */
+            border-bottom: 1px solid var(--gold-main);
         }
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--gold);
+            font-size: 2.5rem;
+            color: var(--gold-main);
             text-decoration: none;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.6); /* تأثير البريق */
         }
 
         nav a {
@@ -47,12 +56,19 @@
             text-decoration: none;
             margin: 0 15px;
             font-weight: 400;
+            font-size: 1.1rem;
+            transition: color 0.3s;
         }
 
-        /* Hero Section */
+        nav a:hover {
+            color: var(--gold-main);
+        }
+
+        /* --- Hero Section (القسم الرئيسي) --- */
         .hero {
-            height: 80vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); /* صورة تقريبية */
+            height: 90vh;
+            /* خلفية صورة تقريبية فخمة - يمكنك تغيير الرابط */
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -61,71 +77,144 @@
             align-items: center;
             text-align: center;
             color: white;
+            animation: fadeIn 2s ease; /* حركة عند الفتح */
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin-bottom: 1rem;
             font-family: 'Playfair Display', serif;
+            color: var(--gold-light);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
         }
 
+        .hero p {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        /* --- الأزرار الفخمة (Golden Action Button) --- */
         .btn-gold {
-            background-color: var(--gold);
-            color: var(--dark);
-            padding: 12px 30px;
+            background-color: var(--gold-main);
+            color: var(--black-rich);
+            padding: 15px 40px;
             text-decoration: none;
             font-weight: bold;
+            font-size: 1.2rem;
             border-radius: 5px;
-            transition: 0.3s;
+            transition: 0.3s, transform 0.2s; /* إضافة حركة عند التمرير */
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.5);
+            border: none;
         }
 
-        /* Products Section */
+        .btn-gold:hover {
+            background-color: var(--gold-light);
+            transform: translateY(-3px); /* يرتفع قليلاً */
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.7);
+        }
+
+        /* --- Products Section (قسم العطور) --- */
         .products {
-            padding: 50px 5%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            padding: 80px 5%;
+            background-color: var(--black-rich);
+            text-align: center;
         }
 
+        .products h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--gold-main);
+            margin-bottom: 50px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        /* --- بطاقة المنتج الفخمة (Premium Card) --- */
         .product-card {
-            background: white;
-            padding: 15px;
+            background: #1a1a1a; /* لون بطاقة داكن قليلاً */
+            padding: 25px;
             border-radius: 10px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid transparent;
+            transition: 0.4s, border-color 0.4s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px); /* حركة الارتفاع للبطاقة */
+            border-color: var(--gold-main);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3); /* ظل ذهبي خفيف */
         }
 
         .product-card img {
             max-width: 100%;
-            height: 200px;
+            height: 300px;
             object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.1)); /* تأثير خفيف للصور */
         }
 
-        .product-card h3 { margin: 15px 0; }
+        .product-card h3 {
+            margin: 15px 0 10px;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-family: 'Cairo', sans-serif;
+        }
 
         .price {
-            color: var(--gold);
+            color: var(--gold-main);
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
         }
 
-        /* Footer / WhatsApp Section */
+        /* --- الحركات (Animations) --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- زر الواتساب العائم --- */
         .whatsapp-float {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px;
+            right: 30px;
             background-color: #25d366;
             color: white;
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 30px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            font-size: 35px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
             z-index: 1000;
+            transition: transform 0.3s;
         }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- Footer (التذييل) الفخم --- */
+        footer {
+            background: var(--black-rich);
+            color: #ccc;
+            text-align: center;
+            padding: 30px 5%;
+            border-top: 1px solid #333;
+            font-size: 1rem;
+        }
+
+        footer p { margin: 5px 0; }
+        footer span { color: var(--gold-main); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -134,36 +223,41 @@
         <a href="#" class="logo">ANBAR</a>
         <nav>
             <a href="#home">الرئيسية</a>
-            <a href="#shop">العطور</a>
+            <a href="#shop">العطور الفاخرة</a>
             <a href="#contact">اتصل بنا</a>
         </nav>
     </header>
 
     <section class="hero" id="home">
-        <h1>عنبر - سحر الروائح الشرقية</h1>
-        <p>اكتشف تشكيلتنا الحصرية من العطور الفاخرة</p>
-        <br>
-        <a href="#shop" class="btn-gold">تسوق الآن</a>
+        <h1>Anbar Parfum</h1>
+        <p>اكتشف عالم العطور الشرقية الحصرية، حيث تلتقي الفخامة بالأصالة.</p>
+        <a href="#shop" class="btn-gold">اكتشف المجموعة</a>
     </section>
 
     <section class="products" id="shop">
-        <div class="product-card">
-            <img src="https://via.placeholder.com/200" alt="عطر 1">
-            <h3>عطر عنبر الملكي</h3>
-            <p class="price">299 DH</p>
-            <a href="https://wa.me/YOUR_PHONE_NUMBER" class="btn-gold">طلب عبر واتساب</a>
-        </div>
-        <div class="product-card">
-            <img src="https://via.placeholder.com/200" alt="عطر 2">
-            <h3>مسك الليل</h3>
-            <p class="price">199 DH</p>
-            <a href="https://wa.me/YOUR_PHONE_NUMBER" class="btn-gold">طلب عبر واتساب</a>
-        </div>
-        <div class="product-card">
-            <img src="https://via.placeholder.com/200" alt="عطر 3">
-            <h3>العود الأصيل</h3>
-            <p class="price">350 DH</p>
-            <a href="https://wa.me/YOUR_PHONE_NUMBER" class="btn-gold">طلب عبر واتساب</a>
+        <h2>مجموعتنا المختارة</h2>
+        
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x400/1a1a1a/d4af37?text=Anbar+Royal" alt="عطر عنبر الملكي">
+                <h3>عطر عنبر الملكي</h3>
+                <p class="price">299 DH</p>
+                <a href="https://wa.me/YOUR_PHONE_NUMBER?text=أود طلب عطر عنبر الملكي" class="btn-gold" target="_blank">طلب عبر واتساب</a>
+            </div>
+            
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x400/1a1a1a/d4af37?text=Musk+Night" alt="مسك الليل">
+                <h3>مسك الليل</h3>
+                <p class="price">199 DH</p>
+                <a href="https://wa.me/YOUR_PHONE_NUMBER?text=أود طلب مسك الليل" class="btn-gold" target="_blank">طلب عبر واتساب</a>
+            </div>
+            
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x400/1a1a1a/d4af37?text=Oud+Classic" alt="العود الأصيل">
+                <h3>العود الأصيل</h3>
+                <p class="price">350 DH</p>
+                <a href="https://wa.me/YOUR_PHONE_NUMBER?text=أود طلب العود الأصيل" class="btn-gold" target="_blank">طلب عبر واتساب</a>
+            </div>
         </div>
     </section>
 
@@ -171,8 +265,9 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <footer style="background: #1a1a1a; color: white; text-align: center; padding: 20px;">
+    <footer>
         <p>&copy; 2026 Anbar Parfum - جميع الحقوق محفوظة</p>
+        <p>تجربة عطرية حصرية بلمسة <span>مغربية</span> أصيلة</p>
     </footer>
 
 </body>
